@@ -1,0 +1,5 @@
+questions:
+  - question: "Which society wrote this game?"
+    answers: ["The Coding Society", "The Gavel Club", "The Film Society", "The Debate society"]
+  - question: "What is the GitHub username of the Coding Society leader?"
+    answers: ["ProgrammerPeter2", "PeterCoder", "HPeti05", "None of the above"]

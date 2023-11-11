@@ -34,9 +34,6 @@ class Question:
         return cls(question, options, correct_idx)
 
     def play(self):
-        """
-        Simulate playing the question
-        """
         print(self.question)
         print("Options:", self.options)
 

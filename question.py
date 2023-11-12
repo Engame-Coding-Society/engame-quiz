@@ -3,17 +3,17 @@ import yaml
 
 class Question:
     """
-    The Model of Questions.
-    See params in the `__init__` method.
+    General class for the questions model
+    See params in the `__init__` method
     """
 
     PROMPTS = []
 
     def __init__(self, question, options):
         """
-        The constructor of the question model
-        :param question: The title (the question itself)
-        :param options: The list of possible answers
+        Constructor of the question model
+        :param question: Question displayed
+        :param options: List of possible answers
         """
         self.question = question
         self.options = options
@@ -21,7 +21,7 @@ class Question:
     @staticmethod
     def load(path: str) -> list:
         """
-        Loads every question from the 'questions.yml' file.
+        Loads every question from the 'questions.yml' file
         :param path: Relative path to the file to read from
         :return: A list of :class:`Question` loaded, or empty list if file is empty or doesn't exist
         """

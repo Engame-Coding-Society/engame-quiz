@@ -1,6 +1,7 @@
 import pygame
 import pygame_gui
 from pygame_gui.core import ObjectID, IncrementalThreadedResourceLoader
+from question import Question
 
 pygame.init()
 pygame.display.set_caption('Engame Quiz')
@@ -37,10 +38,22 @@ while not finished_loading:
 load_time_2 = clock.tick()
 print('Font load time taken:', load_time_2 / 1000.0, 'seconds.')
 
-hello_text = pygame_gui.elements.UILabel(pygame.Rect((0, 0), (800, 100)), "Hello everyone!", ui,
-                                         object_id=ObjectID("#the_title", "@text"), anchors={'top': 'top'})
+question_text = pygame_gui.elements.UILabel(pygame.Rect((0, 0), (800, 100)), "Hello everyone!", ui,
+                                            object_id=ObjectID("#the_title", "@text"), anchors={'top': 'top'})
+answer0_button = pygame_gui.elements.UIButton(pygame.Rect(50, 350, 250, 100), "Loading...", ui)
+answer1_button = pygame_gui.elements.UIButton(pygame.Rect(500, 350, 250, 100), "Loading...", ui)
+answer2_button = pygame_gui.elements.UIButton(pygame.Rect(50, 475, 250, 100), "Loading...", ui)
+answer3_button = pygame_gui.elements.UIButton(pygame.Rect(500, 475, 250, 100), "Loading...", ui)
 
-clock = pygame.time.Clock()
+
+question = Question("Which society wrote this game?", ["The Coding Society", "The Gavel Club", "Movie Society", "Forward Thinkers Club"])
+
+question_text.set_text(question.question)
+answer0_button.set_text(question.options[0])
+answer1_button.set_text(question.options[1])
+answer2_button.set_text(question.options[2])
+answer3_button.set_text(question.options[3])
+
 is_running = True
 
 while is_running:

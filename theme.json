@@ -1,0 +1,12 @@
+{
+
+    "#the_title": {
+        "font": {
+            "size": 32,
+            "bold": 1
+        },
+        "colours": {
+            "normal_text": "#000000"
+        }
+    }
+}

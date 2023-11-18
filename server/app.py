@@ -1,6 +1,14 @@
 import json
+import sys
 import time
+import firebase_admin
+from firebase_admin import credentials, firestore
 from flask import Flask, jsonify, request
+
+
+cred = credentials.Certificate(".firebase.json")
+firebase_admin.initialize_app(cred)
+db = firestore.client()
 
 app = Flask(__name__)
 
@@ -36,6 +44,7 @@ def remove_score(name: str):
 
 @app.route("/scores", methods=["GET"])
 def get_scoreboard():
+    print(sys.argv)
     return success(scoreboard)
 
 

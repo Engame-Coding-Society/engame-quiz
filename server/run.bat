@@ -1,1 +1,2 @@
-flask --app guesser run
+set MODE=test
+flask --app app run

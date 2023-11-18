@@ -61,6 +61,18 @@ while is_running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             is_running = False
+        if event.type == pygame_gui.UI_BUTTON_PRESSED:
+            idx = -10
+            element = event.ui_element
+            if element == answer0_button:
+                idx = 0
+            elif element == answer1_button:
+                idx = 1
+            elif element == answer2_button:
+                idx = 2
+            elif element == answer3_button:
+                idx = 3
+            print(question.options[idx])
         ui.process_events(event)
 
     ui.update(time_delta)

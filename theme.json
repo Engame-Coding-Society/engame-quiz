@@ -1,12 +1,28 @@
 {
-
+    "defaults": {
+        "colours":{
+            "normal_text": "#000000"
+        }
+    },
     "#the_title": {
         "font": {
             "size": 32,
             "bold": 1
+        }
+    },
+    "button": {
+        "misc": {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": 100,
+            "border_width": "0",
+            "shadow_width": "0"
         },
         "colours": {
-            "normal_text": "#000000"
+            "normal_bg": "#ebebeb"
+        },
+        "font": {
+            "size": "16",
+            "bold": "1"
         }
     }
 }

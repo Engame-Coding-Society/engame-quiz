@@ -2,6 +2,7 @@ import unittest
 from question import Question
 from randomization import randomize_array
 
+
 class TestRandomization(unittest.TestCase):
 
     def test_array_randomization(self):
@@ -21,8 +22,10 @@ class TestRandomization(unittest.TestCase):
         randomized_questions = randomize_array(questions)
 
         self.assertEqual(len(questions), len(randomized_questions))
-
         self.assertCountEqual(questions, randomized_questions)
+        for random_question in randomized_questions:
+            print(random_question.question)
+
 
 if __name__ == '__main__':
     unittest.main()

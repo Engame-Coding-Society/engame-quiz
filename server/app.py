@@ -1,6 +1,4 @@
 import json
-import sys
-import time
 import firebase_admin
 from firebase_admin import credentials, firestore
 from flask import Flask, jsonify, request
@@ -11,12 +9,6 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 app = Flask(__name__)
-
-
-scoreboard: list[dict] = [
-    {"name": "Endergamer_hun", "score": 5, "date": 0.0},
-    {"name": "Peter", "score": 3, "date": 0.0},
-]
 
 
 def error(cause: str):
@@ -30,22 +22,20 @@ def success(data=None, **kwargs):
 
 
 def get_player_score(name: str):
-    for score in scoreboard:
-        if score["name"] == name:
-            return score
-    return None
-
-
-def remove_score(name: str):
-    for score in scoreboard:
-        if score["name"] == name:
-            scoreboard.remove(score)
-
+    global db
+    player_ref = db.collection("points_prod").document(name).get()
+    if not player_ref.exists:
+        return None
+    else:
+        return {"name": name, "score": player_ref.to_dict()["score"]}
 
 @app.route("/scores", methods=["GET"])
 def get_scoreboard():
-    print(sys.argv)
-    return success(scoreboard)
+    scores_stream = db.collection("points_prod").stream()
+    scores = []
+    for score in scores_stream:
+        scores.append({"name": score.id, "score": score.to_dict()["score"]})
+    return success(scores)
 
 
 @app.route("/scores/<string:name>", methods=["GET"])
@@ -69,23 +59,25 @@ def add_score():
 
     name: str = data.get("name")
     score: int = data.get("score")
-    date: float = data.get("date") or time.time()
 
-    prev = get_player_score(name)["score"]
-    if prev >= score:
+    prev = get_player_score(name)
+    if prev is not None and prev["score"] >= score:
         return error(f"Score not higher than previous score of {prev}."), 409
 
-    entry = {"name": name, "score": score, "date": date}
-    remove_score(name)
-    scoreboard.append(entry)
-    return success(entry), 201
+    db.collection("points_prod").document(name).set({"score": score})
+    return success({"name": name, "score": score}), 201
+
+
+def get_top_players(limit: int = 10) -> list:
+    top_stream = db.collection("points_prod").order_by("score", direction=firestore.Query.DESCENDING).limit(limit).stream()
+    return [{"name": p.id, "score": p.to_dict()["score"]} for p in top_stream]
 
 
 @app.route("/top", methods=["GET"])
 def get_top():
-    return jsonify(error("Not implemented yet")), 501
+    return success(get_top_players())
 
 
 @app.route("/top/<int:top>", methods=["GET"])
 def get_top_id(top: int):
-    return jsonify(error("Not implemented yet")), 501
+    return success(get_top_players(top))

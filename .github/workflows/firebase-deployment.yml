@@ -20,9 +20,9 @@ jobs:
       with:
         python-version: "3.11"
     - name: Setup Venv
-      run: "chmod +x server/setup-venv.sh && ./server/setup-venv.sh"
+      run: "chmod +x server/setup-venv.sh && cd server && ./server/setup-venv.sh"
     - name: Get the access files
-      run: "echo \"${{ secrets.FIREBASE_TOKEN_FILE }}\" > server/.firebase.json"
+      run: "cd .. && echo \"${{ secrets.FIREBASE_TOKEN_FILE }}\" > server/.firebase.json"
     - uses: lowply/deploy-firebase@v0.0.5
       name: Deploy Firebase
       env:

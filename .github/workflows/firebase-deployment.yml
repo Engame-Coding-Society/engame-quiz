@@ -28,5 +28,5 @@ jobs:
     - uses: lowply/deploy-firebase@v0.0.5
       name: Deploy Firebase
       env:
-        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_CI_TOKEN }}
         FIREBASE_PROJECT: engame-quiz-ea63a

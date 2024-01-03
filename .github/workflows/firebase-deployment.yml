@@ -5,7 +5,7 @@ name: Deploy backend to Firebase Cloud Functions
 
 on:
   push:
-    branches: [ "14-leaderboard-back-emd" ]
+    branches: [ "14-leaderboard-back-end", "main" ]
 
 permissions:
   contents: read

@@ -25,7 +25,7 @@ jobs:
       run: "echo \"${{ secrets.FIREBASE_TOKEN_FILE }}\" > .firebase.json"
     - name: Go Back to Parent Dir
       run: "cd .."
-    - uses: ProgrammerPeter2/deploy-firebase-functions@v0.0.2
+    - uses: ProgrammerPeter2/deploy-firebase-functions@v0.1
       name: Deploy Firebase
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_CI_TOKEN }}

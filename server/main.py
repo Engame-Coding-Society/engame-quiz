@@ -1,10 +1,13 @@
 import json
-from firebase_functions import firestore_fn, https_fn
-from firebase_admin import firestore, initialize_app
+from firebase_functions import firestore_fn, https_fn, options
+from firebase_admin import firestore, credentials, initialize_app
 from flask import Flask, jsonify, request
 import google.cloud.firestore
 
-initialize_app()
+cred = credentials.Certificate(".firebase.json")
+initialize_app(cred)
+
+options.set_global_options(max_instances=10)
 db = firestore.client()
 
 app = Flask(__name__)

@@ -22,7 +22,9 @@ jobs:
     - name: Setup Venv
       run: "chmod +x server/setup-venv.sh && cd server && ./setup-venv.sh"
     - name: Get the access files
-      run: "cd .. && echo \"${{ secrets.FIREBASE_TOKEN_FILE }}\" > server/.firebase.json"
+      run: "echo \"${{ secrets.FIREBASE_TOKEN_FILE }}\" > .firebase.json"
+    - name: Go Back to Parent Dir
+      run: "cd .."
     - uses: lowply/deploy-firebase@v0.0.5
       name: Deploy Firebase
       env:

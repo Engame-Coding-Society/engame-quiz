@@ -78,7 +78,7 @@ def get_top():
     return success(get_top_players())
 
 
-@app.route("scores/top/top/<int:top>", methods=["GET"])
+@app.route("/scores/top/top/<int:top>", methods=["GET"])
 def get_top_id(top: int):
     return success(get_top_players(top))
 

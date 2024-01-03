@@ -1,11 +1,10 @@
 import json
-import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_functions import firestore_fn, https_fn
+from firebase_admin import firestore, initialize_app
 from flask import Flask, jsonify, request
+import google.cloud.firestore
 
-
-cred = credentials.Certificate(".firebase.json")
-firebase_admin.initialize_app(cred)
+initialize_app()
 db = firestore.client()
 
 app = Flask(__name__)
@@ -28,6 +27,7 @@ def get_player_score(name: str):
         return None
     else:
         return {"name": name, "score": player_ref.to_dict()["score"]}
+
 
 @app.route("/scores", methods=["GET"])
 def get_scoreboard():
@@ -73,11 +73,17 @@ def get_top_players(limit: int = 10) -> list:
     return [{"name": p.id, "score": p.to_dict()["score"]} for p in top_stream]
 
 
-@app.route("/top", methods=["GET"])
+@app.route("/scores/top", methods=["GET"])
 def get_top():
     return success(get_top_players())
 
 
-@app.route("/top/<int:top>", methods=["GET"])
+@app.route("scores/top/top/<int:top>", methods=["GET"])
 def get_top_id(top: int):
     return success(get_top_players(top))
+
+
+@https_fn.on_request()
+def handle_https_request(req: https_fn.Request) -> https_fn.Response:
+    with app.request_context(req.environ):
+        return app.full_dispatch_request()

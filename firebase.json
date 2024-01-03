@@ -1,7 +1,7 @@
 {
   "functions": [
     {
-      "source": "functions",
+      "source": "server",
       "codebase": "default",
       "ignore": [
         "venv",
@@ -10,9 +10,5 @@
         "firebase-debug.*.log"
       ]
     }
-  ],
-  "firestore": {
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
-  }
+  ]
 }

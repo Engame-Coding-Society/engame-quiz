@@ -2,6 +2,26 @@ import pygame
 import pygame_gui
 from pygame_gui.core import ObjectID, IncrementalThreadedResourceLoader
 from question import Question
+from screens.question_screen import QuestionScreen
+
+
+def nav_to_answer_screen(q: Question, a: int):
+    # Check the answer and set the correct flag based on the answer
+    correct_answer = q.options[a]
+    if q.answer == correct_answer:
+        screen = CorrectScreen(screen_size, clock, q)
+    else:
+        screen = FailScreen(screen_size, clock, q, correct_answer)
+    screen.next_button_action = lambda: nav_to_question_screen()
+    question_screen.on_got_answer = lambda: nav_to_answer_screen(q, a)
+    question_screen.set_question(q)
+
+    screen.draw_screen(window_surface)
+    pygame.display.update()
+
+
+if __name__ == '__main__':
+
 
 # # PyGame display init
 pygame.init()
@@ -17,76 +37,42 @@ loader = IncrementalThreadedResourceLoader()
 clock = pygame.time.Clock()
 ui = pygame_gui.UIManager((800, 600), 'assets/theme.json', resource_loader=loader)
 
-# ### Font Loading
-ui.add_font_paths("Montserrat",
-                  "assets/fonts/Montserrat-Regular.ttf",
-                  "assets/fonts/Montserrat-Bold.ttf",
-                  "assets/fonts/Montserrat-Italic.ttf",
-                  "assets/fonts/Montserrat-BoldItalic.ttf")
-load_time_1 = clock.tick()
-ui.preload_fonts([{'name': 'Montserrat', 'html_size': 4.5, 'style': 'bold'},
-                  {'name': 'Montserrat', 'html_size': 4.5, 'style': 'regular'},
-                  {'name': 'Montserrat', 'html_size': 2, 'style': 'regular'},
-                  {'name': 'Montserrat', 'html_size': 2, 'style': 'italic'},
-                  {'name': 'Montserrat', 'html_size': 6, 'style': 'bold'},
-                  {'name': 'Montserrat', 'html_size': 6, 'style': 'regular'},
-                  {'name': 'Montserrat', 'html_size': 6, 'style': 'bold_italic'},
-                  {'name': 'Montserrat', 'html_size': 4, 'style': 'bold'},
-                  {'name': 'Montserrat', 'html_size': 4, 'style': 'regular'},
-                  {'name': 'Montserrat', 'html_size': 4, 'style': 'italic'},
-                  ])
-loader.start()
-# #### The Actual Loading Process
-finished_loading = False
-while not finished_loading:
-    finished_loading, progress = loader.update()
-load_time_2 = clock.tick()
-print('Font load time taken:', load_time_2 / 1000.0, 'seconds.')
-
-# ### Set up the actual User Interface
-question_text = pygame_gui.elements.UILabel(pygame.Rect((0, 0), (800, 100)), "Hello everyone!", ui,
-                                            object_id=ObjectID("#the_title", "@text"), anchors={'top': 'top'})
-# #### Answer buttons
-answer0_button = pygame_gui.elements.UIButton(pygame.Rect(50, 350, 250, 100), "Loading...", ui)
-answer1_button = pygame_gui.elements.UIButton(pygame.Rect(500, 350, 250, 100), "Loading...", ui)
-answer2_button = pygame_gui.elements.UIButton(pygame.Rect(50, 475, 250, 100), "Loading...", ui)
-answer3_button = pygame_gui.elements.UIButton(pygame.Rect(500, 475, 250, 100), "Loading...", ui)
-
-# ## Load the questions - now a single item
-question = Question("Which society wrote this game?", ["The Coding Society", "The Gavel Club", "Movie Society", "Forward Thinkers Club"])
-# ### Update the ui by the question
-question_text.set_text(question.question)
-answer0_button.set_text(question.options[0])
-answer1_button.set_text(question.options[1])
-answer2_button.set_text(question.options[2])
-answer3_button.set_text(question.options[3])
+def render_screen(surface):
+    global screen
+    if screen == 0:
+        # Show the question screen
+        question_screen.draw_screen(window_surface)
+    elif screen == 1:
+        # Show the correct screen
+        correct_screen.draw_screen(window_surface)
+    elif screen == 2:
+        # Show the fail screen
+        fail_screen.draw_screen(window_surface)
 
 # # Main game-loop
 is_running = True
 while is_running:
-    time_delta = clock.tick(60) / 1000.0
     # ## Event processing
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             # ### Shutdown algorythm
             is_running = False
-        if event.type == pygame_gui.UI_BUTTON_PRESSED:
+        if event.type == pygame.UI_BUTTON_PRESSED:
             # ### Button pressed: find which one has pressed?
             idx = -10
             element = event.ui_element
-            if element == answer0_button:
+            if element == question_screen.answer0_button:
                 idx = 0
-            elif element == answer1_button:
+            elif element == question_screen.answer1_button:
                 idx = 1
-            elif element == answer2_button:
+            elif element == question_screen.answer2_button:
                 idx = 2
-            elif element == answer3_button:
+            elif element == question_screen.answer3_button:
                 idx = 3
-            print(question.options[idx])  # #### TODO: Answer checking (in a future task)
-        ui.process_events(event)
+            question_screen.on_got_answer(idx)
 
     # ## Update the UI
     ui.update(time_delta)
     window_surface.blit(bg, (0, 0))
-    ui.draw_ui(window_surface)
+    render_screen(window_surface)
     pygame.display.update()

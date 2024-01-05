@@ -25,12 +25,9 @@ jobs:
         python3.11 -m venv env
         source env/bin/activate
         echo "VIRTUAL ENV:" $VIRTUAL_ENV
-    - name: Setup Venv
-      run: "chmod +x server/setup-venv.sh && cd server && ./setup-venv.sh actions"
+        pip install -r server/requirements.txt
     - name: Get the access files
-      run: "echo \"${{ secrets.FIREBASE_TOKEN_FILE }}\" > .firebase.json"
-    - name: Go Back to Parent Dir
-      run: "cd .."
+      run: "echo \"${{ secrets.FIREBASE_TOKEN_FILE }}\" > server/.firebase.json"
     - uses: ProgrammerPeter2/deploy-firebase-functions@v0.1
       name: Deploy Firebase
       env:

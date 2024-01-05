@@ -5,7 +5,7 @@ from flask import Flask, jsonify, request
 import os, sys
 
 prefix = "server/" if not str(os.getcwd()).endswith('server') else ""
-cred = credentials.Certificate(f"{prefix}.firebase.json")
+cred = credentials.Certificate(f".firebase.json")
 initialize_app(cred)
 
 options.set_global_options(max_instances=10)

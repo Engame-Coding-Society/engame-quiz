@@ -19,6 +19,8 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: "3.11"
+    - name: Go to functions dir
+      run: "cd server"
     - name: Run Python commands
       run: |
         pip install --upgrade pip
@@ -27,7 +29,9 @@ jobs:
         echo "VIRTUAL ENV:" $VIRTUAL_ENV
         pip install -r server/requirements.txt
     - name: Get the access files
-      run: "echo \"${{ secrets.FIREBASE_TOKEN_FILE }}\" > server/.firebase.json"
+      run: "echo \"${{ secrets.FIREBASE_TOKEN_FILE }}\" > .firebase.json"
+    - name: Go back to Firebase Directory
+      run: "cd .."
     - uses: ProgrammerPeter2/deploy-firebase-functions@v0.1
       name: Deploy Firebase
       env:

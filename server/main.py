@@ -4,8 +4,8 @@ from firebase_admin import firestore, credentials, initialize_app
 from flask import Flask, jsonify, request
 import os, sys
 
-prefix = "server" if not str(os.getcwd()).endswith('server') else ""
-cred = credentials.Certificate(f"{prefix}/.firebase.json")
+prefix = "server/" if not str(os.getcwd()).endswith('server') else ""
+cred = credentials.Certificate(f"{prefix}.firebase.json")
 initialize_app(cred)
 
 options.set_global_options(max_instances=10)

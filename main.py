@@ -23,7 +23,7 @@ def init_screens(clock, loader):
     return [
         QuestionScreen(SCREEN_SIZE, clock, questions[current_question], loader, nav_to_answer_screen),
         CorrectScreen(SCREEN_SIZE, clock, questions[current_question], loader, nav_to_question_screen),
-        FailScreen(SCREEN_SIZE, clock, questions[current_question], questions[current_question].options[0],
+        FailScreen(SCREEN_SIZE, clock, questions[current_question].options[0],
                    loader, nav_to_question_screen)
     ]
 

@@ -2,77 +2,77 @@ import pygame
 import pygame_gui
 from pygame_gui.core import ObjectID, IncrementalThreadedResourceLoader
 from question import Question
-from screens.question_screen import QuestionScreen
+from screens import *
 
+SCREEN_SIZE = (800, 600)
+current_screen = 0
+last_screen = 0
+current_question = 0
 
 def nav_to_answer_screen(q: Question, a: int):
-    # Check the answer and set the correct flag based on the answer
-    correct_answer = q.options[a]
-    if q.answer == correct_answer:
-        screen = CorrectScreen(screen_size, clock, q)
+    global current_screen
+    global last_screen
+    if q.is_correct(a):
+        current_screen = 1  # Index of CurrentScreen
     else:
-        screen = FailScreen(screen_size, clock, q, correct_answer)
-    screen.next_button_action = lambda: nav_to_question_screen()
-    question_screen.on_got_answer = lambda: nav_to_answer_screen(q, a)
-    question_screen.set_question(q)
+        current_screen = 2  # Index of FailScreen
+    last_screen = 0
 
-    screen.draw_screen(window_surface)
-    pygame.display.update()
+
+def init_screens(clock, loader):
+    return [
+        QuestionScreen(SCREEN_SIZE, clock, questions[current_question], loader, nav_to_answer_screen),
+        CorrectScreen(SCREEN_SIZE, clock, questions[current_question], loader, nav_to_question_screen),
+        FailScreen(SCREEN_SIZE, clock, questions[current_question], questions[current_question].options[0],
+                   loader, nav_to_question_screen)
+    ]
+
+
+def nav_to_question_screen(clock, loader):
+    global current_screen
+    global last_screen
+    global current_question
+    global screen_instances
+
+    last_screen = current_screen
+    current_screen = 0
+    current_question += 1
+
+    screen_instances = init_screens(clock, loader)
+
 
 
 if __name__ == '__main__':
+    # # Asset loading
+    questions = Question.load("tests/questions.yml")
+    # # PyGame display init
+    pygame.init()
+    pygame.display.set_caption('Engame Quiz')
+    window_surface = pygame.display.set_mode(SCREEN_SIZE)
 
+    # ## Background
+    BG_COLOR = pygame.Color("#ebebeb")
+    bg = pygame.Surface(SCREEN_SIZE)
+    bg.fill(BG_COLOR)
+    # ## UI Init
+    res_loader = IncrementalThreadedResourceLoader()
+    clock = pygame.time.Clock()
 
-# # PyGame display init
-pygame.init()
-pygame.display.set_caption('Engame Quiz')
-window_surface = pygame.display.set_mode((800, 600))
+    screen_instances = init_screens(clock, res_loader)
 
-# ## Background
-bg = pygame.Surface((800, 600))
-bg.fill(pygame.Color("#ebebeb"))
+    # # Main game-loop
+    is_running = True
+    while is_running:
+        delta_time = clock.tick(60) / 1000.0
+        # ## Event processing
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                # ### Shutdown algorythm
+                is_running = False
+            screen_instances[current_screen].process_screen_events(event)
+        # ## Update the UI
+        screen_instances[current_screen].update(delta_time)
+        window_surface.blit(bg, (0, 0))
+        screen_instances[current_screen].draw_screen(window_surface)
 
-# ## UI Init
-loader = IncrementalThreadedResourceLoader()
-clock = pygame.time.Clock()
-ui = pygame_gui.UIManager((800, 600), 'assets/theme.json', resource_loader=loader)
-
-def render_screen(surface):
-    global screen
-    if screen == 0:
-        # Show the question screen
-        question_screen.draw_screen(window_surface)
-    elif screen == 1:
-        # Show the correct screen
-        correct_screen.draw_screen(window_surface)
-    elif screen == 2:
-        # Show the fail screen
-        fail_screen.draw_screen(window_surface)
-
-# # Main game-loop
-is_running = True
-while is_running:
-    # ## Event processing
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            # ### Shutdown algorythm
-            is_running = False
-        if event.type == pygame.UI_BUTTON_PRESSED:
-            # ### Button pressed: find which one has pressed?
-            idx = -10
-            element = event.ui_element
-            if element == question_screen.answer0_button:
-                idx = 0
-            elif element == question_screen.answer1_button:
-                idx = 1
-            elif element == question_screen.answer2_button:
-                idx = 2
-            elif element == question_screen.answer3_button:
-                idx = 3
-            question_screen.on_got_answer(idx)
-
-    # ## Update the UI
-    ui.update(time_delta)
-    window_surface.blit(bg, (0, 0))
-    render_screen(window_surface)
-    pygame.display.update()
+        pygame.display.update()

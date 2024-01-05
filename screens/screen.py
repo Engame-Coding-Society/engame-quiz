@@ -1,12 +1,12 @@
-import pygame
-import pygame_gui
+from abc import abstractmethod
+from pygame_gui import UIManager
 
 
 class Screen:
-    def __init__(self, screen_size, clock):
+    def __init__(self, screen_size, clock, loader):
         self.screen_size = screen_size
         self.clock = clock
-        self.init_ui()
+        self.ui = UIManager(self.screen_size, "assets/theme.json", resource_loader=loader)
 
     @abstractmethod
     def init_ui(self):
@@ -18,7 +18,10 @@ class Screen:
         """Handle events that occur on this screen."""
         raise NotImplementedError
 
-    @abstractmethod
+    def update(self, time_delta):
+        self.ui.update(time_delta)
+
+
     def draw_screen(self, surface):
         """Draw the UI elements for this screen to the provided surface."""
-        raise NotImplementedError
+        self.ui.draw_ui(surface)

@@ -20,7 +20,7 @@ jobs:
       with:
         python-version: "3.11"
     - name: Setup Venv
-      run: "chmod +x server/setup-venv.sh && cd server && ./setup-venv.sh"
+      run: "chmod +x server/setup-venv.sh && cd server && ./setup-venv.sh actions"
     - name: Get the access files
       run: "echo \"${{ secrets.FIREBASE_TOKEN_FILE }}\" > .firebase.json"
     - name: Go Back to Parent Dir

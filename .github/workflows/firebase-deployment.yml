@@ -19,6 +19,12 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: "3.11"
+    - name: Run Python commands
+      run: |
+        pip install --upgrade pip
+        python3.11 -m venv env
+        source env/bin/activate
+        echo "VIRTUAL ENV:" $VIRTUAL_ENV
     - name: Setup Venv
       run: "chmod +x server/setup-venv.sh && cd server && ./setup-venv.sh actions"
     - name: Get the access files

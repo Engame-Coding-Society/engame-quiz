@@ -31,7 +31,7 @@ jobs:
       id: create-json
       uses: jsdaniell/create-json@v1.2.2
       with:
-        name: "credentials.json"
+        name: ".firebase.json"
         json: ${{ secrets.FIREBASE_TOKEN_FILE }}
         dir: 'server/'
     - uses: ProgrammerPeter2/deploy-firebase-functions@main

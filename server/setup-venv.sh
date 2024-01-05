@@ -15,4 +15,4 @@ then
   fi
 fi
 
-source venv_path && python3.11 -m pip install -r requirements.txt
+source "$venv_path" && python3.11 -m pip install -r requirements.txt

@@ -27,17 +27,13 @@ jobs:
         echo "VIRTUAL ENV:" $VIRTUAL_ENV
         pip install --upgrade pip
         pip install -r requirements.txt
-#    - name: Set up system venv
-#      run: |
-#        mkdir /github/workspace/server
-#        cd /github/workspace/server
-#        python3.11 -m venv venv
-#        source venv/bin/activate
-#        echo "VIRTUAL ENV:" $VIRTUAL_ENV
-#        pip install --upgrade pip
-#        pip install firebase-functions
     - name: Get the access files
-      run: "echo \"${{ secrets.FIREBASE_TOKEN_FILE }}\" >server/.firebase.json"
+      id: create-json
+      uses: jsdaniell/create-json@v1.2.2
+      with:
+        name: "credentials.json"
+        json: ${{ secrets.FIREBASE_TOKEN_FILE }}
+        dir: 'server/'
     - uses: ProgrammerPeter2/deploy-firebase-functions@main
       name: Deploy Firebase
       env:

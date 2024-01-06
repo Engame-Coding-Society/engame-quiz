@@ -1,0 +1,41 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: Deploy backend to Firebase Cloud Functions
+
+on:
+  push:
+    branches: [ "14-leaderboard-back-end", "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.11"
+    - name: Set up local venv
+      run: |
+        cd server 
+        python3.11 -m venv venv
+        source venv/bin/activate
+        echo "VIRTUAL ENV:" $VIRTUAL_ENV
+        pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Get the access files
+      id: create-json
+      uses: jsdaniell/create-json@v1.2.2
+      with:
+        name: ".firebase.json"
+        json: ${{ secrets.FIREBASE_TOKEN_FILE }}
+        dir: 'server/'
+    - uses: ProgrammerPeter2/deploy-firebase-functions@main
+      name: Deploy Firebase
+      env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_CI_TOKEN }}
+        FIREBASE_PROJECT: engame-quiz-ea63a

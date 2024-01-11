@@ -68,8 +68,10 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: server
+    - name: Unzip Server
+      run: rm -rf server && unzip server.zip -d server
     - name: Some debug
-      run: pwd && ls
+      run: pwd && ls && ls server
     - name: Get the access files
       id: create-json
       uses: jsdaniell/create-json@v1.2.2

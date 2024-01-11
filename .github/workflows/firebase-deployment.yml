@@ -50,11 +50,13 @@ jobs:
         echo "VIRTUAL ENV:" $VIRTUAL_ENV
         pip install --upgrade pip
         pip install -r requirements.txt
+    - name: Package server dir
+      run: zip -r server.zip server
     - name: Upload server dir
       uses: actions/upload-artifact@v3
       with:
         name: server
-        path: ./server
+        path: server.zip
   deploy:
     runs-on: ubuntu-latest
     needs: build_server

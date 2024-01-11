@@ -69,7 +69,7 @@ jobs:
       with:
         name: server
     - name: Unzip Server
-      run: rm -rf server && unzip server.zip -d server
+      run: rm -rf server && unzip server.zip
     - name: Some debug
       run: pwd && ls && ls server
     - name: Get the access files

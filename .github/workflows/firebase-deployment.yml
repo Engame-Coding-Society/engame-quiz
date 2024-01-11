@@ -27,7 +27,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     needs: check-server-changes
-    if: ${{ needs.check-server-changes.outputs.canSkip != 'false' }}
+    if: ${{ needs.check-server-changes.outputs.canSkip != 'true' }}
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.11

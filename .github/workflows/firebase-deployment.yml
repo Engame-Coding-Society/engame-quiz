@@ -67,7 +67,7 @@ jobs:
     - name: Download Artifacts
       uses: actions/download-artifact@v3
     - name: Some debug
-      run: ls
+      run: pwd && ls server
     - name: Get the access files
       id: create-json
       uses: jsdaniell/create-json@v1.2.2

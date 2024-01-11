@@ -69,7 +69,7 @@ jobs:
       with:
         name: server
     - name: Some debug
-      run: pwd && ls server
+      run: pwd && ls
     - name: Get the access files
       id: create-json
       uses: jsdaniell/create-json@v1.2.2

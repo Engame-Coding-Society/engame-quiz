@@ -68,11 +68,16 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: server
+    - name: Check server artifact
+      id: check-server
+      run: if [ -f "server.zip" ]; then echo "server=true"; else echo "server=false"; fi > "$GITHUB_OUTPUT"
     - name: Unzip Server
+      if: ${{ steps.check-server.outputs.server }}
       run: rm -rf server && unzip server.zip
     - name: Some debug
-      run: pwd && ls && ls server
+      run: pwd && ls
     - name: Get the access files
+      if: ${{ steps.check-server.outputs.server }}
       id: create-json
       uses: jsdaniell/create-json@v1.2.2
       with:
@@ -80,9 +85,15 @@ jobs:
         json: ${{ secrets.FIREBASE_TOKEN_FILE }}
         dir: 'server/'
     - name: Activate the venv
+      if: ${{ steps.check-server.outputs.server }}
       run: chmod +x server/venv/bin/activate && source server/venv/bin/activate
+    - name: Fetch Targets
+      id: fetch-targets
+      run: if [ "${{ steps.check-server.output.server }}" = "true" ]; then echo "targets=functions"; else echo "targets=functions"; fi > "$GITHUB_OUTPUT"
     - uses: ProgrammerPeter2/deploy-firebase-functions@main
       name: Deploy Firebase
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_CI_TOKEN }}
         FIREBASE_PROJECT: engame-quiz-ea63a
+      with:
+        targets: ${{ steps.fetch-targets.outputs.targets }}

@@ -51,7 +51,7 @@ jobs:
         pip install --upgrade pip
         pip install -r requirements.txt
     - name: Package server dir
-      run: cd .. && zip -r server.zip server
+      run: zip -r server.zip -x server.zip server
     - name: Upload server dir
       uses: actions/upload-artifact@v3
       with:

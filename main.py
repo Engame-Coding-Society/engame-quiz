@@ -3,6 +3,8 @@ import pygame_gui
 from pygame_gui.core import ObjectID, IncrementalThreadedResourceLoader
 from question import Question
 from screens import *
+from screens.screen import Screen
+
 
 SCREEN_SIZE = (800, 600)
 current_screen = 0
@@ -21,12 +23,13 @@ def nav_to_answer_screen(q: Question, a: int):
 
 def init_screens(clock, loader):
     return [
+        WelcomeScreen(SCREEN_SIZE, clock, loader, nav_to_question_screen),
         QuestionScreen(SCREEN_SIZE, clock, questions[current_question], loader, nav_to_answer_screen),
         CorrectScreen(SCREEN_SIZE, clock, questions[current_question], loader, nav_to_question_screen),
-        FailScreen(SCREEN_SIZE, clock, questions[current_question], questions[current_question].options[0],
-                   loader, nav_to_question_screen)
+        FailScreen(SCREEN_SIZE, clock, questions[current_question].options[0],
+                   loader, nav_to_question_screen),
+        Screen(SCREEN_SIZE, clock, loader)
     ]
-
 
 def nav_to_question_screen(clock, loader):
     global current_screen

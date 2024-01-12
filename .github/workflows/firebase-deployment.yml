@@ -93,18 +93,19 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: build
-    - name: Check artifacts
-      id: check-artifact
-      run: |
-        if [ -f "server.zip" ]; then echo "server=true"; else echo "server=false"; fi > "$GITHUB_OUTPUT"
-        if [ -d "build" ]; then echo "app=true"; else echo "app=false"; fi > "$GITHUB_OUTPUT"
+    - name: Check server artifact
+      id: check-server
+      run: if [ -f "server.zip" ]; then echo "server=true"; else echo "server=false"; fi > "$GITHUB_OUTPUT"
+    - name: Check app artifact
+      id: check-app
+      run: if [ -d "build" ]; then echo "app=true"; else echo "app=false"; fi > "$GITHUB_OUTPUT"
     - name: Unzip Server
-      if: ${{ steps.check-artifact.outputs.server }}
+      if: ${{ steps.check-server.outputs.server }}
       run: rm -rf server && unzip server.zip
     - name: Some debug
       run: pwd && ls
     - name: Get the access files
-      if: ${{ steps.check-artifact.outputs.server }}
+      if: ${{ steps.check-server.outputs.server }}
       id: create-json
       uses: jsdaniell/create-json@v1.2.2
       with:
@@ -112,11 +113,11 @@ jobs:
         json: ${{ secrets.FIREBASE_TOKEN_FILE }}
         dir: 'server/'
     - name: Activate the venv
-      if: ${{ steps.check-artifact.outputs.server }}
+      if: ${{ steps.check-server.outputs.server }}
       run: chmod +x server/venv/bin/activate && source server/venv/bin/activate
     - name: Fetch Targets
       id: fetch-targets
-      run: if [ "${{ steps.check-artifact.outputs.server }}" = "true" ]; then if [ "${{ steps.check-artifact.outputs.app }}" = "true" ]; then echo "targets=hosting,functions"; else echo "targets=functions"; fi; elif [ "${{ steps.check-artifact.outputs.app }}" = "true" ]; then echo "targets=hosting"; else echo "targets=nothing"; fi > "$GITHUB_OUTPUT"
+      run: if [ "${{ steps.check-server.outputs.server }}" = "true" ]; then if [ "${{ steps.check-app.outputs.app }}" = "true" ]; then echo "targets=hosting,functions"; else echo "targets=functions"; fi; elif [ "${{ steps.check-app.outputs.app }}" = "true" ]; then echo "targets=hosting"; else echo "targets=nothing"; fi > "$GITHUB_OUTPUT"
     - uses: ProgrammerPeter2/deploy-firebase-functions@main
       if: ${{ steps.fetch-targets.outputs.targets != 'nothing' }}
       name: Deploy Firebase

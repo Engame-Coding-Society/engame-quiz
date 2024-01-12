@@ -98,7 +98,7 @@ jobs:
       run: if [ -f "server.zip" ]; then echo "server=true"; else echo "server=false"; fi > "$GITHUB_OUTPUT"
     - name: Check app artifact
       id: check-app
-      run: if [ -d "build" ]; then echo "app=true"; else echo "app=false"; fi > "$GITHUB_OUTPUT"
+      run: if [ -d "web" ]; then echo "app=true"; else echo "app=false"; fi > "$GITHUB_OUTPUT"
     - name: Unzip Server
       if: ${{ steps.check-server.outputs.server }}
       run: rm -rf server && unzip server.zip

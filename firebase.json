@@ -12,10 +12,11 @@
     }
   ],
   "hosting": {
-    "public": "build",
+    "public": "web",
     "ignore": [
       "firebase.json",
       "**/.*",
+      "**/*.zip",
       "**/node_modules/**"
     ]
   }

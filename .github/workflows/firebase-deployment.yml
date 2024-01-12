@@ -116,7 +116,7 @@ jobs:
       run: chmod +x server/venv/bin/activate && source server/venv/bin/activate
     - name: Fetch Targets
       id: fetch-targets
-      run: if [ "${{ steps.check-artifact.output.server }}" = "true" ]; then if [ "${{ steps.check-artifact.output.app }}" = "true" ]; then echo "targets=hosting,functions" else echo "targets=functions"; fi; elif [ "${{ steps.check-artifact.output.app }}" = "true" ] echo "targets=hosting"; else echo "targets=nothing"; fi > "$GITHUB_OUTPUT"
+      run: if [ "${{ steps.check-artifact.output.server }}" = "true" ]; then if [ "${{ steps.check-artifact.output.app }}" = "true" ]; then echo "targets=hosting,functions"; else echo "targets=functions"; fi; elif [ "${{ steps.check-artifact.output.app }}" = "true" ] echo "targets=hosting"; else echo "targets=nothing"; fi > "$GITHUB_OUTPUT"
     - uses: ProgrammerPeter2/deploy-firebase-functions@main
       if: ${{ steps.fetch-targets.outputs.targets != 'nothing' }}
       name: Deploy Firebase

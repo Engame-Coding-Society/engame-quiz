@@ -58,9 +58,30 @@ jobs:
         name: server
         path: server.zip
         retention-days: 1
+  build_app:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.11"
+      - name: Download dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pygbag
+      - name: Build the app using Pygbag
+        run: python3 -m pygbag .
+      - name: Upload the resulting artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: build
+          retention-days: 1
   deploy:
     runs-on: ubuntu-latest
-    needs: build_server
+    needs: [build_server, build_app]
+    if: ${{ always() }}
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -68,6 +89,10 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: server
+    - name: Download App Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: build
     - name: Check server artifact
       id: check-server
       run: if [ -f "server.zip" ]; then echo "server=true"; else echo "server=false"; fi > "$GITHUB_OUTPUT"
@@ -89,7 +114,7 @@ jobs:
       run: chmod +x server/venv/bin/activate && source server/venv/bin/activate
     - name: Fetch Targets
       id: fetch-targets
-      run: if [ "${{ steps.check-server.output.server }}" = "true" ]; then echo "targets=functions"; else echo "targets=functions"; fi > "$GITHUB_OUTPUT"
+      run: if [ "${{ steps.check-server.output.server }}" = "true" ]; then echo "targets=hosting,functions"; else echo "targets=hosting"; fi > "$GITHUB_OUTPUT"
     - uses: ProgrammerPeter2/deploy-firebase-functions@main
       name: Deploy Firebase
       env:

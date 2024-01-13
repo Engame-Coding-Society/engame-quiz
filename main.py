@@ -5,6 +5,7 @@ from question import Question
 from screens import *
 from screens.screen import Screen
 
+
 class Screens(Enum):
     START = 0
     QUESTION = 1
@@ -14,9 +15,9 @@ class Screens(Enum):
 
 
 SCREEN_SIZE = (800, 600)
-current_screen = Screens.QUESTION
+current_screen = Screens.START
 last_screen = Screens.START
-current_question = 0
+current_question = -1
 
 
 def nav_to_answer_screen(q: Question, a: int):

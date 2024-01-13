@@ -5,9 +5,10 @@ from main import nav_to_question_screen
 
 class WelcomeScreen(Screen):
     def __init__(self, screen_size, clock, loader, set_callback):
+        super().__init__(screen_size, clock, loader)
+        self.loader = loader
         self.set_callback = set_callback
         self.init_ui()
-        super().__init__(screen_size, clock, loader)
 
 
     def init_ui(self):
@@ -21,11 +22,8 @@ class WelcomeScreen(Screen):
             pygame.Rect((0, 100), (800, 100)), "Start Quiz", self.ui
         )
 
-        # Callback for the start quiz button
-        self.start_quiz_button.set_callback(self.start_quiz)
-
     def start_quiz(self):
-        self.set_callback()
+        self.set_callback(self.clock, self.loader)
 
     def process_screen_events(self, event):
         if event.type == pygame_gui.UI_BUTTON_PRESSED:

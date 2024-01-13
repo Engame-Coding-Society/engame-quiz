@@ -66,7 +66,7 @@ def nav_to_question_screen(clock, loader):
     screen_instances = init_screens(clock, loader)
 
 
-def nav_to_results(clock, loader, result):
+def nav_to_results(clock, res_loader, result):
     global current_screen
     global last_screen
     global player_result
@@ -80,7 +80,7 @@ def nav_to_results(clock, loader, result):
         print("Couldn't save the player score")
         return
     player_result = response["data"]
-    screen_instances = init_screens(clock, loader)
+    screen_instances = init_screens(clock, res_loader)
     
 
 

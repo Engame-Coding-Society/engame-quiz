@@ -1,2 +1,7 @@
 .*
 server/venv
+
+.github/
+
+__pycache__/
+test/__pycache__/

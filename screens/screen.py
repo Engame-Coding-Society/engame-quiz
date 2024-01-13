@@ -3,8 +3,9 @@ from pygame_gui import UIManager
 
 
 class Screen:
-    def __init__(self, screen_size, clock, loader):
+    def __init__(self, screen_size, mobile, clock, loader):
         self.screen_size = screen_size
+        self.mobile = mobile
         self.clock = clock
         self.ui = UIManager(self.screen_size, "assets/theme.json", resource_loader=loader)
 

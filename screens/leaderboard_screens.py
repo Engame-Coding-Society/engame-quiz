@@ -1,6 +1,7 @@
 from screens.screen import Screen
 import pygame_gui
 import pygame
+import leaderboard
 
 
 class PlayerPromptScreen(Screen):
@@ -39,4 +40,25 @@ class PlacementScreen(Screen):
     def process_screen_events(self, event):
         if event.type == pygame_gui.UI_BUTTON_PRESSED:
             self.next_action(self.clock, self.loader)
+        self.ui.process_events(event)
+
+
+class LeaderboardScreen(Screen):
+    def __init__(self, screen_size, clock, loader):
+        super().__init__(screen_size, clock, loader)
+        self.top_players = leaderboard.get_top()["data"]
+        self.init_ui()
+
+    def init_ui(self):
+        self.title = pygame_gui.elements.UILabel(
+            pygame.Rect(0, 50, 800, 50), "Leaderboard", self.ui
+        )
+        self.name_column = pygame_gui.elements.UILabel(pygame.Rect(200, 250, 120, 50), "Player")
+        self.score_column = pygame_gui.elements.UILabel(pygame.Rect(600, 250, 120, 50), "Score")
+
+        for pi in range(len(self.top_players)):
+            pygame_gui.elements.UILabel(pygame.Rect(200, 300+pi*25, 120, 50), self.top_players[pi]["name"], self.ui)
+            pygame_gui.elements.UILabel(pygame.Rect(600, 300+pi*25, 120, 50), str(self.top_players[pi]["score"]), self.ui)
+
+    def process_screen_events(self, event):
         self.ui.process_events(event)

@@ -47,7 +47,7 @@ def init_screens(clock, loader):
                    loader, nav_to_question_screen),
         PlayerPromptScreen(SCREEN_SIZE, clock, loader, nav_to_results),
         PlacementScreen(SCREEN_SIZE, clock, loader, player_result, nav_to_leaderboard),
-        Screen(SCREEN_SIZE, clock, loader)
+        LeaderboardScreen(SCREEN_SIZE, clock, loader)
     ]
 
 

@@ -1,2 +1,6 @@
 .*
 server/venv
+
+.github/
+
+__pycache__/

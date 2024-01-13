@@ -4,26 +4,35 @@ from pygame_gui.core import IncrementalThreadedResourceLoader
 from question import Question
 from screens import *
 from screens.screen import Screen
+from score import ScoreManager
+import leaderboard
+
 
 class Screens(Enum):
     START = 0
     QUESTION = 1
     CORRECT = 2
     FAIL = 3
-    LEADERBOARD = 4
+    LEADERBOARD_PLAYER_PROMT = 4
+    LEADERBOARD_PLACEMENT = 5
+    LEADERBOARD = 6
 
 
 SCREEN_SIZE = (800, 600)
 current_screen = Screens.QUESTION
 last_screen = Screens.START
 current_question = 0
+player_result = {"name": "unkown", "score": 0}
+scores = ScoreManager()
 
 
 def nav_to_answer_screen(q: Question, a: int):
     global current_screen
     global last_screen
+    global scores
     if q.is_correct(a):
         current_screen = Screens.CORRECT  # Index of CurrentScreen
+        scores.increment() 
     else:
         current_screen = Screens.FAIL  # Index of FailScreen
     last_screen = Screens.QUESTION
@@ -36,8 +45,11 @@ def init_screens(clock, loader):
         CorrectScreen(SCREEN_SIZE, clock, questions[current_question], loader, nav_to_question_screen),
         FailScreen(SCREEN_SIZE, clock, questions[current_question].options[0],
                    loader, nav_to_question_screen),
+        PlayerPromptScreen(SCREEN_SIZE, clock, loader, nav_to_results),
+        Screen(SCREEN_SIZE, clock, loader),
         Screen(SCREEN_SIZE, clock, loader)
     ]
+
 
 def nav_to_question_screen(clock, loader):
     global current_screen
@@ -46,10 +58,30 @@ def nav_to_question_screen(clock, loader):
     global screen_instances
 
     last_screen = current_screen
-    current_screen = Screens.QUESTION
-    current_question += 1
-
+    if (current_question+1) < len(questions):
+        current_screen = Screens.QUESTION
+        current_question += 1
+    else:
+        current_screen = Screens.LEADERBOARD_PLAYER_PROMT
     screen_instances = init_screens(clock, loader)
+
+
+def nav_to_results(clock, loader, result):
+    global current_screen
+    global last_screen
+    global player_result
+    global screen_instances
+
+    last_screen = current_screen
+    current_screen = Screens.LEADERBOARD_PLACEMENT
+
+    response = leaderboard.save_player(result, scores.get_score())
+    if not response["success"]:
+        print("Couldn't save the player score")
+        return
+    player_result = response["data"]
+    screen_instances = init_screens(clock, loader)
+    
 
 
 if __name__ == '__main__':

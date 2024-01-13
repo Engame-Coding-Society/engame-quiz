@@ -46,7 +46,7 @@ def init_screens(clock, loader):
         FailScreen(SCREEN_SIZE, clock, questions[current_question].options[0],
                    loader, nav_to_question_screen),
         PlayerPromptScreen(SCREEN_SIZE, clock, loader, nav_to_results),
-        Screen(SCREEN_SIZE, clock, loader),
+        PlacementScreen(SCREEN_SIZE, clock, loader, player_result, nav_to_leaderboard),
         Screen(SCREEN_SIZE, clock, loader)
     ]
 
@@ -82,6 +82,16 @@ def nav_to_results(clock, res_loader, result):
     player_result = response["data"]
     screen_instances = init_screens(clock, res_loader)
     
+
+def nav_to_leaderboard(clock, res_loader):
+    global current_screen
+    global last_screen
+    global screen_instances
+
+    last_screen = current_screen
+    current_screen = Screens.LEADERBOARD
+
+    screen_instances = init_screens(clock, res_loader)
 
 
 if __name__ == '__main__':

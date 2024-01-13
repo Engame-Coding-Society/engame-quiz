@@ -18,7 +18,9 @@ class Screens(Enum):
     LEADERBOARD = 6
 
 
-SCREEN_SIZE = (800, 600)
+# PC - Mobile
+mobile = True
+SCREEN_SIZE = [(800, 600),(400, 600)][mobile]
 current_screen = Screens.QUESTION
 last_screen = Screens.START
 current_question = 0
@@ -40,14 +42,14 @@ def nav_to_answer_screen(q: Question, a: int):
 
 def init_screens(clock, loader):
     return [
-        WelcomeScreen(SCREEN_SIZE, clock, loader, nav_to_question_screen),
-        QuestionScreen(SCREEN_SIZE, clock, questions[current_question], loader, nav_to_answer_screen),
-        CorrectScreen(SCREEN_SIZE, clock, questions[current_question], loader, nav_to_question_screen),
-        FailScreen(SCREEN_SIZE, clock, questions[current_question].options[0],
+        WelcomeScreen(SCREEN_SIZE, mobile, clock, loader, nav_to_question_screen),
+        QuestionScreen(SCREEN_SIZE, mobile, clock, questions[current_question], loader, nav_to_answer_screen),
+        CorrectScreen(SCREEN_SIZE, mobile, clock, questions[current_question], loader, nav_to_question_screen),
+        FailScreen(SCREEN_SIZE, mobile, clock, questions[current_question].options[0],
                    loader, nav_to_question_screen),
-        PlayerPromptScreen(SCREEN_SIZE, clock, loader, nav_to_results),
-        Screen(SCREEN_SIZE, clock, loader),
-        Screen(SCREEN_SIZE, clock, loader)
+        PlayerPromptScreen(SCREEN_SIZE, mobile, clock, loader, nav_to_results),
+        Screen(SCREEN_SIZE, mobile, clock, loader),
+        Screen(SCREEN_SIZE, mobile, clock, loader)
     ]
 
 

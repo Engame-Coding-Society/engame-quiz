@@ -4,8 +4,8 @@ import pygame
 
 
 class WelcomeScreen(Screen):
-    def __init__(self, screen_size, clock, loader, set_callback):
-        super().__init__(screen_size, clock, loader)
+    def __init__(self, screen_size, mobile, clock, loader, set_callback):
+        super().__init__(screen_size, mobile, clock, loader)
         self.set_callback = set_callback
         self.loader = loader
         self.init_ui()
@@ -13,7 +13,7 @@ class WelcomeScreen(Screen):
     def init_ui(self):
         # Title label
         self.title_label = pygame_gui.elements.UILabel(
-            pygame.Rect((0, 0), (800, 100)), "Engame Quiz", self.ui
+            pygame.Rect((0, 0), (self.screen_size[0], 100)), "Engame Quiz", self.ui
         )
 
         # Start quiz button

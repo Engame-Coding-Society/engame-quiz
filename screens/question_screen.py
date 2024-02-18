@@ -4,17 +4,18 @@ import pygame
 
 
 class QuestionScreen(Screen):
-    def __init__(self, screen_size, clock, question, loader, on_got_answer):
-        super().__init__(screen_size, clock, loader)
+    def __init__(self, screen_size, mobile, clock, question, loader, on_got_answer):
+        super().__init__(screen_size, mobile, clock, loader)
         self.question = question
         self.on_got_answer = on_got_answer
         self.init_ui()
 
     def init_ui(self):
         self.question_text = pygame_gui.elements.UILabel(
-            pygame.Rect((0, 0), (800, 100)), self.question.question, self.ui
+            pygame.Rect((0, 0), (self.screen_size[0], 100)), self.question.question, self.ui
         )
         # #### Answer buttons
+        width = self.screen_size[0]
         self.answer_buttons = [
             pygame_gui.elements.UIButton(pygame.Rect(50, 350, 250, 100), self.question.options[0], self.ui),
             pygame_gui.elements.UIButton(pygame.Rect(500, 350, 250, 100), self.question.options[1], self.ui),

@@ -15,9 +15,9 @@ class Screens(Enum):
 
 
 SCREEN_SIZE = (800, 600)
-current_screen = Screens.QUESTION
+current_screen = Screens.START
 last_screen = Screens.START
-current_question = 0
+current_question = -1
 
 
 def nav_to_answer_screen(q: Question, a: int):
@@ -32,14 +32,13 @@ def nav_to_answer_screen(q: Question, a: int):
 
 def init_screens(clock, loader):
     return [
-        Screen(SCREEN_SIZE, clock, loader),
+        WelcomeScreen(SCREEN_SIZE, clock, loader, nav_to_question_screen),
         QuestionScreen(SCREEN_SIZE, clock, questions[current_question], loader, nav_to_answer_screen),
         CorrectScreen(SCREEN_SIZE, clock, questions[current_question], loader, nav_to_question_screen),
         FailScreen(SCREEN_SIZE, clock, questions[current_question].options[0],
                    loader, nav_to_question_screen),
         Screen(SCREEN_SIZE, clock, loader)
     ]
-
 
 def nav_to_question_screen(clock, loader):
     global current_screen

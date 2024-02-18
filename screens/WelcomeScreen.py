@@ -4,8 +4,9 @@ import pygame
 
 
 class WelcomeScreen(Screen):
-    def __init__(self, screen_size, mobile, clock, loader, set_callback):
-        super().__init__(screen_size, mobile, clock, loader)
+    def __init__(self, screen_size, clock, loader, set_callback):
+        super().__init__(screen_size, clock, loader)
+        self.loader = loader
         self.set_callback = set_callback
         self.loader = loader
         self.init_ui()
@@ -22,7 +23,7 @@ class WelcomeScreen(Screen):
         )
 
     def start_quiz(self):
-        self.set_callback()
+        self.set_callback(self.clock, self.loader)
 
     def process_screen_events(self, event):
         if event.type == pygame_gui.UI_BUTTON_PRESSED:

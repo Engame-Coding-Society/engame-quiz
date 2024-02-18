@@ -8,6 +8,7 @@ from score import ScoreManager
 import leaderboard
 
 
+
 class Screens(Enum):
     START = 0
     QUESTION = 1
@@ -19,11 +20,13 @@ class Screens(Enum):
 
 
 SCREEN_SIZE = (800, 600)
-current_screen = Screens.QUESTION
+current_screen = Screens.START
 last_screen = Screens.START
+
 current_question = 0
 player_result = {"name": "unkown", "score": 0}
 scores = ScoreManager()
+
 
 
 def nav_to_answer_screen(q: Question, a: int):

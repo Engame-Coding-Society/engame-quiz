@@ -1,7 +1,3 @@
 .*
 server/venv
-
-.github/
-
-__pycache__/
-test/__pycache__/
+**/__pycache__

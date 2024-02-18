@@ -4,8 +4,8 @@ import pygame
 
 
 class QuestionScreen(Screen):
-    def __init__(self, screen_size, mobile, clock, question, loader, on_got_answer):
-        super().__init__(screen_size, mobile, clock, loader)
+    def __init__(self, screen_size, clock, question, loader, on_got_answer):
+        super().__init__(screen_size, clock, loader)
         self.question = question
         self.on_got_answer = on_got_answer
         self.init_ui()

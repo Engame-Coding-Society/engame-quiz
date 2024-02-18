@@ -5,8 +5,8 @@ import leaderboard
 
 
 class PlayerPromptScreen(Screen):
-    def __init__(self, size, mobile, clock, loader, next_action):
-        super().__init__(size, mobile, clock, loader)
+    def __init__(self, size, clock, loader, next_action):
+        super().__init__(size, clock, loader)
         self.next_action = next_action
         self.loader = loader
         self.init_ui()

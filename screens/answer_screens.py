@@ -3,7 +3,7 @@ import pygame, pygame_gui
 
 
 class CorrectScreen(Screen):
-    def __init__(self, screen_size, clock, question, loader, next_button_action):
+    def __init__(self, screen_size, clock, loader, question, next_button_action):
         super().__init__(screen_size, clock, loader)
         self.question = question
         self.next_button_action = next_button_action
@@ -23,7 +23,7 @@ class CorrectScreen(Screen):
 
 
 class FailScreen(Screen):
-    def __init__(self, screen_size, clock, correct_answer, loader, next_button_action):
+    def __init__(self, screen_size, clock, loader, correct_answer, next_button_action):
         super().__init__(screen_size, clock, loader)
         self.correct_answer = correct_answer
         self.next_button_action = next_button_action

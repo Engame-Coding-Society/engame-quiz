@@ -4,9 +4,10 @@ import pygame
 
 
 class QuestionScreen(Screen):
-    def __init__(self, screen_size, clock, question, loader, on_got_answer):
+    def __init__(self, screen_size, clock, loader, question, on_got_answer):
         super().__init__(screen_size, clock, loader)
         self.question = question
+        self.loader = loader
         self.on_got_answer = on_got_answer
         self.init_ui()
 
@@ -28,8 +29,7 @@ class QuestionScreen(Screen):
             for bi in range(len(self.answer_buttons)):
                 button = self.answer_buttons[bi]
                 if button == event.ui_element:
-                    self.on_got_answer(self.question, bi)
-                    print(bi)
+                    self.on_got_answer(self.clock, self.loader, self.question, bi)
         self.ui.process_events(event)
 
     def draw_screen(self, surface):

@@ -62,3 +62,6 @@ class LeaderboardScreen(Screen):
 
     def process_screen_events(self, event):
         self.ui.process_events(event)
+
+    def draw_screen(self, surface):
+        self.ui.draw_screen(surface)

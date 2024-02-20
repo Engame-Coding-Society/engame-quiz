@@ -12,9 +12,9 @@ class CorrectScreen(Screen):
 
     def init_ui(self):
         self.question_text = pygame_gui.elements.UILabel(
-            pygame.Rect((0, 0), (800, 100)), "Correct!", self.ui
+            pygame.Rect((0, 50), (self.screen_size[0], 100)), "Correct!", self.ui
         )
-        self.next_button = pygame_gui.elements.UIButton(pygame.Rect((0, 100), (800, 100)), "Next", self.ui)
+        self.next_button = pygame_gui.elements.UIButton(pygame.Rect(0, int(self.screen_size[1] / 2) - 50, self.screen_size[0], 100), "Next", self.ui)
 
     def process_screen_events(self, event):
         if event.type == pygame_gui.UI_BUTTON_PRESSED:
@@ -31,8 +31,10 @@ class FailScreen(Screen):
         self.init_ui()
 
     def init_ui(self):
-        self.question_text = pygame_gui.elements.UILabel(pygame.Rect((0, 0), (800, 100)), "Wrong! The correct answer is " + self.correct_answer, self.ui)
-        self.next_button = pygame_gui.elements.UIButton(pygame.Rect((0, 100), (800, 100)), "Next", self.ui)
+        self.question_title = pygame_gui.elements.UILabel(pygame.Rect((0, 0), (self.screen_size[0], 25)), "Wrong!", self.ui)
+        self.answer_title = pygame_gui.elements.UILabel(pygame.Rect((0, 25), (self.screen_size[0], 25)),"The correct answer is", self.ui)
+        self.correct_answer_label = pygame_gui.elements.UILabel(pygame.Rect((0, 50), (self.screen_size[0], 50)), self.correct_answer, self.ui)
+        self.next_button = pygame_gui.elements.UIButton(pygame.Rect((0, int(self.screen_size[1] / 2) - 25), (self.screen_size[0], 100)), "Next", self.ui)
 
     def process_screen_events(self, event):
         if event.type == pygame_gui.UI_BUTTON_PRESSED:

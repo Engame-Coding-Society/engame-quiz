@@ -18,10 +18,10 @@ class QuestionScreen(Screen):
         # #### Answer buttons
         width = self.screen_size[0]
         self.answer_buttons = [
-            pygame_gui.elements.UIButton(pygame.Rect(50, 350, 250, 100), self.question.options[0], self.ui),
-            pygame_gui.elements.UIButton(pygame.Rect(500, 350, 250, 100), self.question.options[1], self.ui),
-            pygame_gui.elements.UIButton(pygame.Rect(50, 475, 250, 100), self.question.options[2], self.ui),
-            pygame_gui.elements.UIButton(pygame.Rect(500, 475, 250, 100), self.question.options[3], self.ui)
+            pygame_gui.elements.UIButton(pygame.Rect(0, 225, self.screen_size[0], 50), self.question.options[0], self.ui),
+            pygame_gui.elements.UIButton(pygame.Rect(0, 300, self.screen_size[0], 50), self.question.options[1], self.ui),
+            pygame_gui.elements.UIButton(pygame.Rect(0, 375, self.screen_size[0], 50), self.question.options[2], self.ui),
+            pygame_gui.elements.UIButton(pygame.Rect(0, 450, self.screen_size[0], 50), self.question.options[3], self.ui)
         ]
 
     def process_screen_events(self, event):

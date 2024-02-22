@@ -9,3 +9,4 @@ pygame~=2.5.2
 pygame_gui
 PyYAML~=6.0.1
 requests
+

@@ -4,7 +4,7 @@ from pygame_gui.core import IncrementalThreadedResourceLoader
 from question import Question
 from screens import *
 from score import ScoreManager
-import leaderboard
+import leaderboard, randomization
 
 
 class Screens(Enum):
@@ -109,7 +109,7 @@ def nav_to_leaderboard(clock, res_loader):
 
 if __name__ == '__main__':
     # # Asset loading
-    questions = Question.load("tests/questions.yml")
+    questions = randomization.randomize_array(Question.load("tests/questions.yml"))
     # # PyGame display init
     pygame.init()
     pygame.display.set_caption('Engame Quiz')

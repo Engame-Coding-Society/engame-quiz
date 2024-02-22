@@ -1,4 +1,5 @@
 from screens.screen import Screen
+from screens.text import Text
 import pygame_gui
 import pygame
 
@@ -12,9 +13,8 @@ class QuestionScreen(Screen):
         self.init_ui()
 
     def init_ui(self):
-        self.question_text = pygame_gui.elements.UILabel(
-            pygame.Rect((0, 0), (self.screen_size[0], 100)), self.question.question, self.ui
-        )
+        self.question_text = Text(pygame.Rect((0, 0), (self.screen_size[0], 100)),
+                                  self.question.question, self.ui)
         # #### Answer buttons
         width = self.screen_size[0]
         self.answer_buttons = [

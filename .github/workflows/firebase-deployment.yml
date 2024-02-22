@@ -5,7 +5,7 @@ name: Deploy backend to Firebase Cloud Functions
 
 on:
   push:
-    branches: [ "23-full-ci-cd", "main" ]
+    branches: [ "29-mobile-ui", "main" ]
 
 permissions:
   contents: read

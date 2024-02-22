@@ -1,25 +1,27 @@
 from screens.screen import Screen
+from screens.text import Text
 import pygame_gui
 import pygame
 
 
 class QuestionScreen(Screen):
-    def __init__(self, screen_size, clock, question, loader, on_got_answer):
+    def __init__(self, screen_size, clock, loader, question, on_got_answer):
         super().__init__(screen_size, clock, loader)
         self.question = question
+        self.loader = loader
         self.on_got_answer = on_got_answer
         self.init_ui()
 
     def init_ui(self):
-        self.question_text = pygame_gui.elements.UILabel(
-            pygame.Rect((0, 0), (800, 100)), self.question.question, self.ui
-        )
+        self.question_text = Text(pygame.Rect((0, 0), (self.screen_size[0], 100)),
+                                  self.question.question, self.ui)
         # #### Answer buttons
+        width = self.screen_size[0]
         self.answer_buttons = [
-            pygame_gui.elements.UIButton(pygame.Rect(50, 350, 250, 100), self.question.options[0], self.ui),
-            pygame_gui.elements.UIButton(pygame.Rect(500, 350, 250, 100), self.question.options[1], self.ui),
-            pygame_gui.elements.UIButton(pygame.Rect(50, 475, 250, 100), self.question.options[2], self.ui),
-            pygame_gui.elements.UIButton(pygame.Rect(500, 475, 250, 100), self.question.options[3], self.ui)
+            pygame_gui.elements.UIButton(pygame.Rect(0, 225, width, 50), self.question.options[0], self.ui),
+            pygame_gui.elements.UIButton(pygame.Rect(0, 300, width, 50), self.question.options[1], self.ui),
+            pygame_gui.elements.UIButton(pygame.Rect(0, 375, width, 50), self.question.options[2], self.ui),
+            pygame_gui.elements.UIButton(pygame.Rect(0, 450, width, 50), self.question.options[3], self.ui)
         ]
 
     def process_screen_events(self, event):
@@ -28,7 +30,6 @@ class QuestionScreen(Screen):
                 button = self.answer_buttons[bi]
                 if button == event.ui_element:
                     self.on_got_answer(self.question, bi)
-                    print(bi)
         self.ui.process_events(event)
 
     def draw_screen(self, surface):

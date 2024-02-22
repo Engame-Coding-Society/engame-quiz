@@ -91,8 +91,8 @@ def nav_to_results(clock, res_loader, result):
     response = leaderboard.save_player(result, scores.get_score())
     if not response["success"]:
         print("Couldn't save the player score")
-        return
-    player_result = response["data"]
+    else:
+        player_result = response["data"]
     screen_instance = init_screen(clock, res_loader)
     
 

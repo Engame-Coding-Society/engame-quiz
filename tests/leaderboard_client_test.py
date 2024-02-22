@@ -1,6 +1,6 @@
 import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import leaderboard
+import leaderboard, random
 
 
 player = "Python Gamer"
@@ -13,3 +13,6 @@ if not results["success"]:
 else:
     for player in results["data"]:
         print(f"Player: {player['name']} score: {player['score']}")
+    random_player = random.choice(results["data"])['name']
+    random_player_info = leaderboard.get_player_score(random_player)
+    print(random_player_info)

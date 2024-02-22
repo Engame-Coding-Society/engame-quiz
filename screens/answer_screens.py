@@ -7,7 +7,6 @@ class CorrectScreen(Screen):
         super().__init__(screen_size, clock, loader)
         self.question = question
         self.next_button_action = next_button_action
-        self.loader = loader
         self.init_ui()
 
     def init_ui(self):
@@ -18,7 +17,7 @@ class CorrectScreen(Screen):
 
     def process_screen_events(self, event):
         if event.type == pygame_gui.UI_BUTTON_PRESSED:
-            self.next_button_action(self.clock, self.loader)
+            self.next_button_action()
         self.ui.process_events(event)
 
 
@@ -27,7 +26,6 @@ class FailScreen(Screen):
         super().__init__(screen_size, clock, loader)
         self.correct_answer = correct_answer
         self.next_button_action = next_button_action
-        self.loader = loader
         self.init_ui()
 
     def init_ui(self):
@@ -38,7 +36,7 @@ class FailScreen(Screen):
 
     def process_screen_events(self, event):
         if event.type == pygame_gui.UI_BUTTON_PRESSED:
-            self.next_button_action(self.clock, self.loader)
+            self.next_button_action()
         self.ui.process_events(event)
 
     def draw_screen(self, surface):

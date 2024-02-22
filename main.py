@@ -1,4 +1,4 @@
-import pygame
+import pygame, asyncio
 from enum import Enum
 from pygame_gui.core import IncrementalThreadedResourceLoader
 from question import Question
@@ -19,40 +19,41 @@ class Screens(Enum):
 
 SCREEN_SIZE = (350, 500)
 current_screen = Screens.START
-last_screen = Screens.START
-
+# # Asset loading
+questions = randomization.randomize_array(Question.load("tests/questions.yml"))
 current_question = -1
 player_result = {"name": "unkown", "score": 0}
 scores = ScoreManager()
+# ## UI Init
+res_loader = IncrementalThreadedResourceLoader()
+clock = pygame.time.Clock()
 
 
-def init_screen(game_clock, loader):
+def init_screen():
     match current_screen:
         case Screens.START:
-            return WelcomeScreen(SCREEN_SIZE, game_clock, loader, nav_to_question_screen)
+            return WelcomeScreen(SCREEN_SIZE, clock, res_loader, nav_to_question_screen)
         case Screens.QUESTION:
-            return QuestionScreen(SCREEN_SIZE, game_clock, loader,
+            return QuestionScreen(SCREEN_SIZE, clock, res_loader,
                                   questions[current_question], nav_to_answer_screen)
         case Screens.CORRECT:
-            return CorrectScreen(SCREEN_SIZE, game_clock, loader,
+            return CorrectScreen(SCREEN_SIZE, clock, res_loader,
                                  questions[current_question], nav_to_question_screen)
         case Screens.FAIL:
-            return FailScreen(SCREEN_SIZE, game_clock, loader,
+            return FailScreen(SCREEN_SIZE, clock, res_loader,
                               questions[current_question].options[0], nav_to_question_screen)
         case Screens.LEADERBOARD_PLAYER_PROMPT:
-            return PlayerPromptScreen(SCREEN_SIZE, game_clock, loader, nav_to_results)
+            return PlayerPromptScreen(SCREEN_SIZE, clock, res_loader, nav_to_results)
         case Screens.LEADERBOARD_PLACEMENT:
-            return PlacementScreen(SCREEN_SIZE, game_clock, loader, player_result, nav_to_leaderboard)
+            return PlacementScreen(SCREEN_SIZE, clock, res_loader, player_result, nav_to_leaderboard)
         case Screens.LEADERBOARD:
-            return LeaderboardScreen(SCREEN_SIZE, game_clock, loader)
+            return LeaderboardScreen(SCREEN_SIZE, clock, res_loader)
         case _:
             raise NotImplementedError("You haven't implemented your screen yet!")
 
 
-def nav_to_answer_screen(game_clock: pygame.time.Clock, loader: IncrementalThreadedResourceLoader,
-                         q: Question, a: int):
+def nav_to_answer_screen(q: Question, a: int):
     global current_screen
-    global last_screen
     global scores
     global screen_instance
     if q.is_correct(a):
@@ -60,32 +61,27 @@ def nav_to_answer_screen(game_clock: pygame.time.Clock, loader: IncrementalThrea
         scores.increment() 
     else:
         current_screen = Screens.FAIL  # Index of FailScreen
-    last_screen = Screens.QUESTION
-    screen_instance = init_screen(game_clock, loader)
+    screen_instance = init_screen()
 
 
-def nav_to_question_screen(clock, loader):
+def nav_to_question_screen():
     global current_screen
-    global last_screen
     global current_question
     global screen_instance
 
-    last_screen = current_screen
     if (current_question+1) < len(questions):
         current_screen = Screens.QUESTION
         current_question += 1
     else:
         current_screen = Screens.LEADERBOARD_PLAYER_PROMPT
-    screen_instance = init_screen(clock, loader)
+    screen_instance = init_screen()
 
 
-def nav_to_results(clock, res_loader, result):
+def nav_to_results(result):
     global current_screen
-    global last_screen
     global player_result
     global screen_instance
 
-    last_screen = current_screen
     current_screen = Screens.LEADERBOARD_PLACEMENT
 
     response = leaderboard.save_player(result, scores.get_score())
@@ -93,23 +89,23 @@ def nav_to_results(clock, res_loader, result):
         print("Couldn't save the player score")
     else:
         player_result = response["data"]
-    screen_instance = init_screen(clock, res_loader)
+    screen_instance = init_screen()
     
 
-def nav_to_leaderboard(clock, res_loader):
+def nav_to_leaderboard():
     global current_screen
-    global last_screen
     global screen_instance
 
-    last_screen = current_screen
     current_screen = Screens.LEADERBOARD
 
-    screen_instance = LeaderboardScreen(SCREEN_SIZE, clock, res_loader)
+    screen_instance = init_screen()
 
 
-if __name__ == '__main__':
-    # # Asset loading
-    questions = randomization.randomize_array(Question.load("tests/questions.yml"))
+screen_instance = None
+
+
+async def main():
+    global screen_instance
     # # PyGame display init
     pygame.init()
     pygame.display.set_caption('Engame Quiz')
@@ -119,11 +115,8 @@ if __name__ == '__main__':
     BG_COLOR = pygame.Color("#ebebeb")
     bg = pygame.Surface(SCREEN_SIZE)
     bg.fill(BG_COLOR)
-    # ## UI Init
-    res_loader = IncrementalThreadedResourceLoader()
-    clock = pygame.time.Clock()
 
-    screen_instance = init_screen(clock, res_loader)
+    screen_instance = init_screen()
 
     # # Main game-loop
     is_running = True
@@ -142,3 +135,8 @@ if __name__ == '__main__':
         screen_instance.draw_screen(window_surface)
 
         pygame.display.update()
+        await asyncio.sleep(0)
+
+
+if __name__ == '__main__':
+    asyncio.run(main())

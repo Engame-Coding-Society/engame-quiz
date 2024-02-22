@@ -2,8 +2,8 @@ import pygame, asyncio
 from enum import Enum
 from pygame_gui.core import IncrementalThreadedResourceLoader
 from question import Question
-from screens import *
 from score import ScoreManager
+from screens import *
 import leaderboard, randomization
 
 

@@ -101,7 +101,7 @@ jobs:
       id: check-app
       run: if [ -d "web" ]; then echo "app=true"; else echo "app=false"; fi > "$GITHUB_OUTPUT"
     - name: Unzip Server
-      if: ${{ steps.check-server.outputs.server != "false" }}
+      if: ${{ steps.check-server.outputs.server != false }}
       run: rm -rf server && unzip server.zip
     - name: Some debug
       run: pwd && ls

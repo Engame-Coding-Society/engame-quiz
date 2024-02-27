@@ -7,7 +7,6 @@ class CorrectScreen(Screen):
         super().__init__(screen_size, clock, loader)
         self.question = question
         self.next_button_action = next_button_action
-        self.init_ui()
 
     def init_ui(self):
         self.question_text = pygame_gui.elements.UILabel(
@@ -26,7 +25,6 @@ class FailScreen(Screen):
         super().__init__(screen_size, clock, loader)
         self.correct_answer = correct_answer
         self.next_button_action = next_button_action
-        self.init_ui()
 
     def init_ui(self):
         self.question_title = pygame_gui.elements.UILabel(pygame.Rect((0, 0), (self.screen_size[0], 25)), "Wrong!", self.ui)

@@ -48,7 +48,6 @@ class LeaderboardScreen(Screen):
         super().__init__(screen_size, clock, loader)
         top_players_resp = leaderboard.get_top()
         self.top_players = top_players_resp["data"] if top_players_resp["success"] else [{"name": "Error", "score": top_players_resp["cause"]}]
-        self.init_ui()
 
     def init_ui(self):
         self.title = pygame_gui.elements.UILabel(

@@ -10,7 +10,6 @@ class QuestionScreen(Screen):
         self.question = question
         self.loader = loader
         self.on_got_answer = on_got_answer
-        self.init_ui()
 
     def init_ui(self):
         self.question_text = Text(pygame.Rect((0, 0), (self.screen_size[0], 100)),

@@ -31,6 +31,12 @@ clock = pygame.time.Clock()
 
 
 def init_screen():
+    screen = construct_screen()
+    RENDERER.init_ui(screen)
+    return screen
+
+
+def construct_screen():
     match current_screen:
         case Screens.START:
             return WelcomeScreen(SCREEN_SIZE, clock, res_loader, nav_to_question_screen)
@@ -98,7 +104,6 @@ def nav_to_leaderboard():
     global screen_instance
 
     current_screen = Screens.LEADERBOARD
-
     screen_instance = init_screen()
 
 
@@ -108,7 +113,6 @@ screen_instance = None
 async def main():
     global screen_instance
     screen_instance = init_screen()
-    RENDERER.init_ui(screen_instance)
     # # Main game-loop
     is_running = True
     while is_running:

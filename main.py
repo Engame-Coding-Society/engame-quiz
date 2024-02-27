@@ -4,6 +4,7 @@ from pygame_gui.core import IncrementalThreadedResourceLoader
 from question import Question
 from score import ScoreManager
 from screens import *
+from screens.backends import RENDERER
 import leaderboard, randomization
 
 
@@ -106,35 +107,14 @@ screen_instance = None
 
 async def main():
     global screen_instance
-    # # PyGame display init
-    pygame.init()
-    pygame.display.set_caption('Engame Quiz')
-    window_surface = pygame.display.set_mode(SCREEN_SIZE)
-
-    # ## Background
-    BG_COLOR = pygame.Color("#ebebeb")
-    bg = pygame.Surface(SCREEN_SIZE)
-    bg.fill(BG_COLOR)
-
     screen_instance = init_screen()
-
+    RENDERER.init_ui(screen_instance)
     # # Main game-loop
     is_running = True
     while is_running:
-        delta_time = clock.tick(60) / 1000.0
-        # ## Event processing
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                # ### Shutdown algorythm
-                is_running = False
-            screen_instance.process_screen_events(event)
-        # ## Update the UI
-        screen_instance.update(delta_time)
-        window_surface.fill(BG_COLOR)
-        window_surface.blit(bg, (0, 0))
-        screen_instance.draw_screen(window_surface)
-
-        pygame.display.update()
+        RENDERER.handle_events()
+        RENDERER.update()
+        RENDERER.draw()
         await asyncio.sleep(0)
 
 

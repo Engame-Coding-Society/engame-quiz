@@ -7,7 +7,6 @@ class WelcomeScreen(Screen):
     def __init__(self, screen_size, clock, loader, set_callback):
         super().__init__(screen_size, clock, loader)
         self.set_callback = set_callback
-        self.init_ui()
 
     def init_ui(self):
         # Title label

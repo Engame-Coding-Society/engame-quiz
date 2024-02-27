@@ -1,4 +1,5 @@
 from screens.screen import Screen
+from screens.backends import EventType
 import pygame, pygame_gui
 
 
@@ -15,7 +16,7 @@ class CorrectScreen(Screen):
         self.next_button = pygame_gui.elements.UIButton(pygame.Rect(0, int(self.screen_size[1] / 2) - 50, self.screen_size[0], 100), "Next", self.ui)
 
     def process_screen_events(self, event):
-        if event.type == pygame_gui.UI_BUTTON_PRESSED:
+        if event.type == EventType.BUTTON_PRESSED:
             self.next_button_action()
         self.ui.process_events(event)
 
@@ -33,7 +34,7 @@ class FailScreen(Screen):
         self.next_button = pygame_gui.elements.UIButton(pygame.Rect((0, int(self.screen_size[1] / 2) - 25), (self.screen_size[0], 100)), "Next", self.ui)
 
     def process_screen_events(self, event):
-        if event.type == pygame_gui.UI_BUTTON_PRESSED:
+        if event.type == EventType.BUTTON_PRESSED:
             self.next_button_action()
         self.ui.process_events(event)
 

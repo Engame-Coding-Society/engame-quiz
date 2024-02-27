@@ -1,4 +1,5 @@
 from screens.backends.renderer import Renderer
+from screens.backends.events import *
 
 try:
     import pygame

@@ -19,7 +19,7 @@ class Renderer:
         raise NotImplementedError
 
     @abstractmethod
-    def serialize_event(self, *args):
+    def _serialize_event(self, event, *args):
         raise NotImplementedError
 
     @abstractmethod

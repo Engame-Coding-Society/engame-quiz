@@ -1,4 +1,5 @@
 from screens.screen import Screen
+from screens.backends import EventType
 from screens.text import Text
 import pygame_gui
 import pygame
@@ -24,10 +25,10 @@ class QuestionScreen(Screen):
         ]
 
     def process_screen_events(self, event):
-        if event.type == pygame_gui.UI_BUTTON_PRESSED:
+        if event.type == EventType.BUTTON_PRESSED:
             for bi in range(len(self.answer_buttons)):
                 button = self.answer_buttons[bi]
-                if button == event.ui_element:
+                if button == event.component:
                     self.on_got_answer(self.question, bi)
         self.ui.process_events(event)
 

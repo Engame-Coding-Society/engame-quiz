@@ -1,4 +1,4 @@
-from screens.backends import Renderer
+from screens.backends import Renderer, ButtonPressedEvent, EntryValueChangedEvent
 import pygame, pygame_gui
 
 
@@ -38,10 +38,17 @@ class PygameRenderer(Renderer):
             if event.type == pygame.QUIT:
                 # ### Shutdown algorythm
                 exit(0)
-            self.screen.process_screen_events(event)
+            self.screen.process_screen_events(self._serialize_event(event))
 
-    def serialize_event(self, *args):
-        pass
+    def _serialize_event(self, event, *args):
+        match event.type:
+            case pygame_gui.UI_BUTTON_PRESSED:
+                return ButtonPressedEvent(event.ui_element)
+            case pygame_gui.UI_TEXT_ENTRY_CHANGED:
+                return EntryValueChangedEvent(event.ui_element, event.text)
+            case _:
+                # TODO: remove this opportunity after the component implementation
+                return event
 
     def update(self):
         self.screen.update(self.delta_time)

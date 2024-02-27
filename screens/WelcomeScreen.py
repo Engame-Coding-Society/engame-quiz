@@ -1,4 +1,5 @@
 from screens.screen import Screen
+from screens.backends import EventType, ButtonPressedEvent
 import pygame_gui
 import pygame
 
@@ -20,7 +21,7 @@ class WelcomeScreen(Screen):
         )
 
     def process_screen_events(self, event):
-        if event.type == pygame_gui.UI_BUTTON_PRESSED:
-            if event.ui_element == self.start_quiz_button:
+        if event.type == EventType.BUTTON_PRESSED:
+            if event.component == self.start_quiz_button:
                 self.set_callback()
         self.ui.process_events(event)

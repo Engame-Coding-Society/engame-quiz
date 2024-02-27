@@ -1,5 +1,6 @@
 from screens.screen import Screen
 from screens.text import Text
+from screens.backends import EventType
 import pygame_gui
 import pygame
 import leaderboard
@@ -9,6 +10,7 @@ class PlayerPromptScreen(Screen):
     def __init__(self, size, clock, loader, next_action):
         super().__init__(size, clock, loader)
         self.next_action = next_action
+        self.entry_value = ""
         self.init_ui()
 
     def init_ui(self):
@@ -18,8 +20,10 @@ class PlayerPromptScreen(Screen):
         self.next_button = pygame_gui.elements.UIButton(pygame.Rect(0, 250, self.screen_size[0], 100), "Next",self.ui)
 
     def process_screen_events(self, event):
-        if event.type == pygame_gui.UI_BUTTON_PRESSED:
-            self.next_action(self.entry.get_text())
+        if event.type == EventType.ENTRY_VALUE_CHANGED:
+            self.entry_value = event.value
+        if event.type == EventType.BUTTON_PRESSED:
+            self.next_action(self.entry_value)
         self.ui.process_events(event)
 
 
@@ -38,7 +42,7 @@ class PlacementScreen(Screen):
         self.next_button = pygame_gui.elements.UIButton(pygame.Rect(0, 400, self.screen_size[0], 100), "Go to Leaderboard", self.ui)
 
     def process_screen_events(self, event):
-        if event.type == pygame_gui.UI_BUTTON_PRESSED:
+        if event.type == EventType.BUTTON_PRESSED:
             self.next_action()
         self.ui.process_events(event)
 

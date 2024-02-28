@@ -1,27 +1,22 @@
 from screens.screen import Screen
-from screens.backends import EventType
-from screens.text import Text
-import pygame_gui
-import pygame
+from screens.backends import EventType, Rect
 
 
 class QuestionScreen(Screen):
-    def __init__(self, screen_size, clock, loader, question, on_got_answer):
-        super().__init__(screen_size, clock, loader)
+    def __init__(self, question, on_got_answer):
+        super().__init__()
         self.question = question
-        self.loader = loader
         self.on_got_answer = on_got_answer
 
-    def init_ui(self):
-        self.question_text = Text(pygame.Rect((0, 0), (self.screen_size[0], 100)),
-                                  self.question.question, self.ui)
+    def init_ui(self, renderer):
+        self.question_text = renderer.text(Rect("0px", "0px", "100%", "100px"),
+                                  self.question.question)
         # #### Answer buttons
-        width = self.screen_size[0]
         self.answer_buttons = [
-            pygame_gui.elements.UIButton(pygame.Rect(0, 225, width, 50), self.question.options[0], self.ui),
-            pygame_gui.elements.UIButton(pygame.Rect(0, 300, width, 50), self.question.options[1], self.ui),
-            pygame_gui.elements.UIButton(pygame.Rect(0, 375, width, 50), self.question.options[2], self.ui),
-            pygame_gui.elements.UIButton(pygame.Rect(0, 450, width, 50), self.question.options[3], self.ui)
+            renderer.button(Rect("0px", "225px", "100%", "50px"), self.question.options[0], "answer_1"),
+            renderer.button(Rect("0px", "300px", "100%", "50px"), self.question.options[1], "answer_2"),
+            renderer.button(Rect("0px", "375px", "100%", "50px"), self.question.options[2], "answer_3"),
+            renderer.button(Rect("0px", "450px", "100%", "50px"), self.question.options[3], "answer_4")
         ]
 
     def process_screen_events(self, event):
@@ -30,7 +25,3 @@ class QuestionScreen(Screen):
                 button = self.answer_buttons[bi]
                 if button == event.component:
                     self.on_got_answer(self.question, bi)
-        self.ui.process_events(event)
-
-    def draw_screen(self, surface):
-        super().draw_screen(surface)

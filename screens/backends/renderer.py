@@ -7,9 +7,9 @@ class Renderer:
     def __init__(self):
         self.screen: Screen = None
 
+    @abstractmethod
     def init_ui(self, screen: Screen) -> None:
-        self.screen = screen
-        self.screen.init_ui()
+        raise NotImplementedError
 
     @abstractmethod
     def draw(self):
@@ -36,6 +36,6 @@ class Renderer:
         raise NotImplementedError
 
     @abstractmethod
-    def entry(self, rect: Rect,  id: str, placeholder: str=None, object_class: str=None) -> Entry:
+    def entry(self, rect: Rect,  id: str, placeholder: str="", object_class: str=None) -> Entry:
         raise NotImplementedError
     

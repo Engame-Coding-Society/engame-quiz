@@ -1,10 +1,11 @@
-from screens.backends.renderer import Renderer
 from screens.backends.events import *
-from screens.backends.components import Rect, Text, Button, Entry
+from screens.backends.components import Rect
 
 try:
     import pygame
-    import screens.backends.pygame as pygame_backend
+    import screens.backends.pygame.renderer as pygame_backend
     RENDERER = pygame_backend.PygameRenderer()
-except ImportError:
+except ImportError as import_err:
+    print("couldn't init pygame!")
+    from screens.backends.renderer import Renderer
     RENDERER = Renderer()

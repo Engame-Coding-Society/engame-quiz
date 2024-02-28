@@ -39,22 +39,19 @@ def init_screen():
 def construct_screen():
     match current_screen:
         case Screens.START:
-            return WelcomeScreen(SCREEN_SIZE, clock, res_loader, nav_to_question_screen)
+            return WelcomeScreen(nav_to_question_screen)
         case Screens.QUESTION:
-            return QuestionScreen(SCREEN_SIZE, clock, res_loader,
-                                  questions[current_question], nav_to_answer_screen)
+            return QuestionScreen(questions[current_question], nav_to_answer_screen)
         case Screens.CORRECT:
-            return CorrectScreen(SCREEN_SIZE, clock, res_loader,
-                                 questions[current_question], nav_to_question_screen)
+            return CorrectScreen(nav_to_question_screen)
         case Screens.FAIL:
-            return FailScreen(SCREEN_SIZE, clock, res_loader,
-                              questions[current_question].options[0], nav_to_question_screen)
+            return FailScreen(questions[current_question].options[0], nav_to_question_screen)
         case Screens.LEADERBOARD_PLAYER_PROMPT:
-            return PlayerPromptScreen(SCREEN_SIZE, clock, res_loader, nav_to_results)
+            return PlayerPromptScreen(nav_to_results)
         case Screens.LEADERBOARD_PLACEMENT:
-            return PlacementScreen(SCREEN_SIZE, clock, res_loader, player_result, nav_to_leaderboard)
+            return PlacementScreen(player_result, nav_to_leaderboard)
         case Screens.LEADERBOARD:
-            return LeaderboardScreen(SCREEN_SIZE, clock, res_loader)
+            return LeaderboardScreen()
         case _:
             raise NotImplementedError("You haven't implemented your screen yet!")
 

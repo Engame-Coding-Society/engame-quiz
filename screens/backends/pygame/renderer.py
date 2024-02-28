@@ -1,5 +1,8 @@
 from screens.backends import Renderer, ButtonPressedEvent, EntryValueChangedEvent
+from screens.backends.pygame.components import PygameText, PygameButton, PygameEntry
 import pygame, pygame_gui
+
+from screens.backends.components import Rect, Entry, Button, Text
 
 
 class PygameRenderer(Renderer):
@@ -52,3 +55,12 @@ class PygameRenderer(Renderer):
 
     def update(self):
         self.screen.update(self.delta_time)
+
+    def text(self, rect: Rect, text: str, id: str = None, object_class: str = None) -> Text:
+        return PygameText(self, rect, text, id, object_class)
+
+    def button(self, rect: Rect, text: str, id: str = None, object_class: str = None) -> Button:
+        return PygameButton(self.ui_manager, rect, text, id, object_class)
+
+    def entry(self, rect: Rect, id: str, placeholder: str = None, object_class: str = None) -> Entry:
+        return PygameEntry(self, rect, placeholder, id, object_class)

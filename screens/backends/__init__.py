@@ -1,5 +1,6 @@
 from screens.backends.renderer import Renderer
 from screens.backends.events import *
+from screens.backends.components import Rect, Text, Button, Entry
 
 try:
     import pygame

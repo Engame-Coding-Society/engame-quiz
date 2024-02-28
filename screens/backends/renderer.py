@@ -1,4 +1,5 @@
 from screens.screen import Screen
+from screens.backends.components import Rect, Text, Button, Entry
 from abc import abstractmethod
 
 
@@ -26,4 +27,15 @@ class Renderer:
     def update(self):
         raise NotImplementedError
 
+    @abstractmethod
+    def text(self, rect: Rect, text: str, id: str=None, object_class: str=None) -> Text:
+        raise NotImplementedError
+
+    @abstractmethod
+    def button(self, rect: Rect, text: str, id: str=None, object_class: str=None) -> Button:
+        raise NotImplementedError
+
+    @abstractmethod
+    def entry(self, rect: Rect,  id: str, placeholder: str=None, object_class: str=None) -> Entry:
+        raise NotImplementedError
     

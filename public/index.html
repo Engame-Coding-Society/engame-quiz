@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Engame Quiz</title>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+    <script>
+        const renderer_module = {
+            render: (html_content) => {
+                document.getElementById("app").innerHTML = html_content
+            }
+        }
+
+        async function main(){
+            let pyodide = await loadPyodide();
+            // Load packages
+            await pyodide.loadPackage("micropip")
+            let micropip = pyodide.pyimport("micropip")
+            await pyodide.loadPackage("pyyaml")
+            await pyodide.loadPackage("requests")
+            pyodide.registerJsModule("web", renderer_module)
+            // Load the source code
+            let resp = await fetch("http://" + window.location.host + "/source.zip")
+            let buffer = await resp.arrayBuffer()
+            await pyodide.unpackArchive(buffer, "zip")
+            pyodide.pyimport("main")
+            await pyodide.runPythonAsync(`
+                import main
+                main.main()
+            `)
+        }
+
+        main();
+    </script>
+</body>
+</html>

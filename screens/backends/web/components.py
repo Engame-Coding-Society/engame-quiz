@@ -1,38 +1,55 @@
 from screens.backends.components import *
-import pyodide_html as html
-import js
 from abc import abstractmethod
-
-ROOT_DIV = "app"
 
 
 class IWebComponent(UIComponent):
     @abstractmethod
-    def _init_native_component(self):
+    def _get_beginning(self):
         raise NotImplementedError
 
-    def draw(self):
-        element = self._init_native_component()
-        element.add(style=f"position: absolute; top: {self.rect.left}; left: {self.rect.top}; width: {self.rect.width}; height: {self.rect}")
+    @abstractmethod
+    def _get_content(self):
+        raise NotImplementedError
+
+    @abstractmethod
+    def _get_end(self):
+        raise NotImplementedError
+
+    def generate(self):
+        element = self._get_beginning()
         if self.id is not None:
-            element.add(id=self.id)
+            element += f" id={self.id}"
         if self.object_class is not None:
-            element.add(className=self.object_class)
-        print(js.document.getElementById(ROOT_DIV))
-        js.document.getElementById(ROOT_DIV).appendChild(element)
+            element += f" id={self.object_class}"
+        element += f" style=\"position: absolute; top: {self.rect.left}; left: {self.rect.top}; width: {self.rect.width}; height: {self.rect.height}\""
+        element += self._get_content()
+        element += self._get_end()
+        return element
 
 
 class WebText(Text, IWebComponent):
     def __init__(self, rect: Rect, text: str, id: str=None, object_class: str=None):
         super().__init__(rect, text, id, object_class)
 
-    def _init_native_component(self):
-        return html.p(self.text)
+    def _get_beginning(self):
+        return "<p"
+
+    def _get_content(self):
+        return f">{self.text}"
+
+    def _get_end(self):
+        return "</p>"
 
 
 class WebButton(Button, IWebComponent):
     def __init__(self, rect: Rect, text: str, id: str=None, object_class: str=None):
         super().__init__(rect, text, id, object_class)
 
-    def _init_native_component(self):
-        return html.button(self.text)
+    def _get_beginning(self):
+        return "<button type=\"button\""
+
+    def _get_content(self):
+        return f">{self.text}"
+
+    def _get_end(self):
+        return "</button>"

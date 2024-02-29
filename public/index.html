@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Engame Quiz</title>
     <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
     <div id="app"></div>
@@ -20,18 +21,18 @@
                 if(component.id === null) return
                 switch (component.type){
                     case "button":
-                        document.getElementById(component.id).addEventListener('click', () => {
+                        $(`#${component.id}`).on('click', () => {
                             event_handlers.add_event("button_pressed", component.id)
                         })
+                        break;
                     default:
-                    case "text":
                         break;
                 }
             },
             render: (components) => {
-                document.getElementById("app").innerHTML = ""
+                $("#app").html("")
                 JSON.parse(components).forEach((component, _, __) => {
-                    document.getElementById("app").innerHTML += component.content
+                    $("#app").append($(component.content))
                     renderer_module.setup_event_callback(component)
                 })
             },

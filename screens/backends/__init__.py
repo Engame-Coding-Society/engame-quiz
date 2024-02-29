@@ -7,5 +7,5 @@ try:
     RENDERER = pygame_backend.PygameRenderer()
 except ImportError as import_err:
     print("couldn't init pygame!")
-    from screens.backends.renderer import Renderer
-    RENDERER = Renderer()
+    from screens.backends.web.renderer import WebRenderer
+    RENDERER = WebRenderer()

@@ -1,6 +1,5 @@
-import pygame, asyncio
+import asyncio
 from enum import Enum
-from pygame_gui.core import IncrementalThreadedResourceLoader
 from question import Question
 from score import ScoreManager
 from screens import *
@@ -21,13 +20,10 @@ class Screens(Enum):
 SCREEN_SIZE = (350, 500)
 current_screen = Screens.START
 # # Asset loading
-questions = randomization.randomize_array(Question.load("tests/questions.yml"))
+questions = randomization.randomize_array(Question.load("questions.yml"))
 current_question = -1
 player_result = {"name": "unkown", "score": 0}
 scores = ScoreManager()
-# ## UI Init
-res_loader = IncrementalThreadedResourceLoader()
-clock = pygame.time.Clock()
 
 
 def init_screen():

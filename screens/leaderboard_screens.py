@@ -13,7 +13,7 @@ class PlayerPromptScreen(Screen):
         self.title = renderer.text(Rect("0px", "0px", "100%", "50px"), "You've completed the Engame quiz!")
         self.label = renderer.text(Rect("0px", "150px", "100%", "50px"), "Enter a player name:")
         self.entry = renderer.entry(Rect("50px", "200px", "80%", "50px"), "player_input")
-        self.next_button = renderer.button(Rect("15%", "250px", "80%", "50px"), "Next")
+        self.next_button = renderer.button(Rect("15%", "250px", "80%", "50px"), "Next", "next_btn")
 
     def process_screen_events(self, event):
         if event.type == EventType.ENTRY_VALUE_CHANGED:
@@ -31,7 +31,7 @@ class PlacementScreen(Screen):
     def init_ui(self, renderer):
         renderer.text(Rect("0px", "100px", "100%", "100px"),
                       f"Congrats {self.result['name']}!\nYou're earned {self.result['score']} points!")
-        renderer.button(Rect("0px", "400px", "100%", "100px"), "Go to Leaderboard")
+        renderer.button(Rect("0px", "400px", "100%", "100px"), "Go to Leaderboard", "next_btn")
 
     def process_screen_events(self, event):
         if event.type == EventType.BUTTON_PRESSED:

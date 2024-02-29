@@ -8,17 +8,43 @@
 <body>
     <div id="app"></div>
     <script>
+        const event_handlers = {
+            events: [],
+            add_event: (type, id) => {
+                event_handlers.events.push({"type": type, "id": id})
+            }
+        }
+
         const renderer_module = {
-            render: (html_content) => {
-                document.getElementById("app").innerHTML = html_content
+            setup_event_callback: component => {
+                if(component.id === null) return
+                switch (component.type){
+                    case "button":
+                        document.getElementById(component.id).addEventListener('click', () => {
+                            event_handlers.add_event("button_pressed", component.id)
+                        })
+                    default:
+                    case "text":
+                        break;
+                }
+            },
+            render: (components) => {
+                document.getElementById("app").innerHTML = ""
+                JSON.parse(components).forEach((component, _, __) => {
+                    document.getElementById("app").innerHTML += component.content
+                    renderer_module.setup_event_callback(component)
+                })
+            },
+            get_events: () => {
+                let events = event_handlers.events
+                event_handlers.events = []
+                return events
             }
         }
 
         async function main(){
             let pyodide = await loadPyodide();
             // Load packages
-            await pyodide.loadPackage("micropip")
-            let micropip = pyodide.pyimport("micropip")
             await pyodide.loadPackage("pyyaml")
             await pyodide.loadPackage("requests")
             pyodide.registerJsModule("web", renderer_module)

@@ -1,9 +1,10 @@
 from screens.backends import Rect
 from screens.backends.components import Entry, Button, Text
 from screens.backends.renderer import Renderer
+from screens.backends.events import ButtonPressedEvent, EntryValueChangedEvent
 from screens.screen import Screen
 from screens.backends.web.components import WebText, WebButton
-import web
+import web, json
 
 
 class WebRenderer(Renderer):
@@ -13,6 +14,7 @@ class WebRenderer(Renderer):
         self.__components = []
 
     def init_ui(self, screen: Screen) -> None:
+        self.__components = []
         self.rendered = False
         self.screen = screen
         self.screen.init_ui(self)
@@ -21,17 +23,32 @@ class WebRenderer(Renderer):
         if self.rendered:
             return
         print("currently drawing!")
-        html_content = ""
+        html_content = []
         for component in self.__components:
-            html_content += component.generate()
-        web.render(html_content)
+            html_content.append(component.generate())
+        web.render(json.dumps(html_content))
         self.rendered = True
 
     def handle_events(self):
-        pass
+        for event in web.get_events():
+            self.screen.process_screen_events(self._serialize_event(event))
+            print(event)
+
+    def __find_component(self, id: str):
+        for component in self.__components:
+            if component.id == id:
+                return component
+        return None
 
     def _serialize_event(self, event, *args):
-        pass
+        component = self.__find_component(event.id)
+        match event.type:
+            case "button_pressed":
+                return ButtonPressedEvent(component)
+            case "entry_changed":
+                return EntryValueChangedEvent(component, event.value)
+            case _:
+                raise NotImplementedError(f"You haven't implemented {event.type} event!")
 
     def update(self):
         pass

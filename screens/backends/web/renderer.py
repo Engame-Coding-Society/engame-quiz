@@ -1,9 +1,8 @@
 from screens.backends import Rect
-from screens.backends.components import Entry, Button, Text
 from screens.backends.renderer import Renderer
 from screens.backends.events import ButtonPressedEvent, EntryValueChangedEvent
 from screens.screen import Screen
-from screens.backends.web.components import WebText, WebButton
+from screens.backends.web.components import WebText, WebButton, WebEntry
 import web, json
 
 
@@ -57,11 +56,11 @@ class WebRenderer(Renderer):
         self.__components.append(component)
         return component
 
-    def text(self, rect: Rect, text: str, id: str = None, object_class: str = None) -> Text:
+    def text(self, rect: Rect, text: str, id: str = None, object_class: str = None):
         return self.__add_component(WebText(rect, text, id, object_class))
 
-    def button(self, rect: Rect, text: str, id: str = None, object_class: str = None) -> Button:
+    def button(self, rect: Rect, text: str, id: str = None, object_class: str = None):
         return self.__add_component(WebButton(rect, text, id, object_class))
 
-    def entry(self, rect: Rect, id: str, placeholder: str = "", object_class: str = None) -> Entry:
-        pass
+    def entry(self, rect: Rect, id: str, placeholder: str = "", object_class: str = None):
+        return self.__add_component(WebEntry(rect, placeholder, id, object_class))

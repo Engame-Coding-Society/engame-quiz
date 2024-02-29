@@ -63,3 +63,20 @@ class WebButton(Button, IWebComponent):
 
     def _get_type(self):
         return "button"
+
+
+class WebEntry(Entry, IWebComponent):
+    def __init__(self, rect: Rect, placeholder: str=None, id: str=None, object_class: str=None):
+        super().__init__(rect, placeholder, id, object_class)
+
+    def _get_beginning(self):
+        return "<input type=\"text\""
+
+    def _get_content(self):
+        return f" placeholder=\"{self.placeholder}\""
+
+    def _get_end(self):
+        return "/>"
+
+    def _get_type(self):
+        return "entry"

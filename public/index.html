@@ -11,19 +11,23 @@
     <script>
         const event_handlers = {
             events: [],
-            add_event: (type, id) => {
-                event_handlers.events.push({"type": type, "id": id})
+            add_event: (type, id, args=null) => {
+                let event = {"type": type, "id": id}
+                event_handlers.events.push((args === null) ? event : {...event, ...args})
             }
         }
 
         const renderer_module = {
             setup_event_callback: component => {
                 if(component.id === null) return
+                let element = $(`#${component.id}`)
                 switch (component.type){
                     case "button":
-                        $(`#${component.id}`).on('click', () => {
-                            event_handlers.add_event("button_pressed", component.id)
-                        })
+                        element.on('click', () => event_handlers.add_event("button_pressed", component.id))
+                        break;
+                    case "entry":
+                        element.on('change', () => event_handlers.add_event("entry_changed", component.id,
+                            {value: element.val()}))
                         break;
                     default:
                         break;

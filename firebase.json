@@ -12,12 +12,26 @@
     }
   ],
   "hosting": {
-    "public": "web",
+    "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/*.zip",
       "**/node_modules/**"
-    ]
+    ],
+    "rewrites": [
+      {
+        "source": "/api/**",
+        "function": {
+          "functionId": "handle_https_request"
+        }
+      }
+    ],
+    "headers": [{
+      "source": "**/*",
+      "headers": [ {
+        "key": "Access-Control-Allow-Origin",
+        "value": "*"
+      }]
+    }]
   }
 }

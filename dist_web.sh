@@ -5,4 +5,4 @@ then
 fi
 
 zip -r public/source.zip . -x server/**\* assets/**\* tests/**\* public/**\*
-python3 -m http.server -d public
+firebase deploy --only hosting

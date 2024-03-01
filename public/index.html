@@ -47,14 +47,30 @@
             }
         }
 
+        const requests_module = {
+            request: (method, url, data = null, headers = null) => {
+                let request = new XMLHttpRequest();
+                request.open(method, url, false)
+                if(headers !== null){
+                    for (const [key, value] of Object.entries(headers)) {
+                        request.setRequestHeader(key, value)
+                    }
+                }
+                request.send(body)
+                while(request.readyState !== 4) {}
+                return {status_code: request.status, text: request.responseText}
+            }
+        }
+
         async function main(){
             let pyodide = await loadPyodide();
             // Load packages
             await pyodide.loadPackage("pyyaml")
             await pyodide.loadPackage("requests")
+            //pyodide.registerJsModule("requests", requests_module)
             pyodide.registerJsModule("web", renderer_module)
             // Load the source code
-            let resp = await fetch("http://" + window.location.host + "/source.zip")
+            let resp = await fetch(window.location.protocol + "//" + window.location.host + "/source.zip")
             let buffer = await resp.arrayBuffer()
             await pyodide.unpackArchive(buffer, "zip")
             pyodide.pyimport("main")

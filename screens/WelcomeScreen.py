@@ -9,9 +9,9 @@ class WelcomeScreen(Screen):
 
     def init_ui(self, renderer):
         # Title label
-        self.title_label = renderer.text(Rect("0px", "0px", "100%", "75px"), "Engame Quiz")
+        self.title_label = renderer.text(Rect("0px", "100px", "100%", "75px"), "Engame Quiz")
         # Start quiz button
-        self.start_quiz_button = renderer.button(Rect("0px", "100px", "100%", "175px"), "Start Quiz", "start_btn")
+        self.start_quiz_button = renderer.button(Rect("0px", "450px", "100%", "150px"), "Start Quiz", "start_btn")
 
     def process_screen_events(self, event):
         if event.type == EventType.BUTTON_PRESSED:

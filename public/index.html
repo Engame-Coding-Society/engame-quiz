@@ -5,9 +5,34 @@
     <title>Engame Quiz</title>
     <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        #app {
+            justify-self: center;
+            display: block;
+            max-width: 500px;
+            max-height: 600px;
+        }
+
+        #app-frame {
+            display: flex;
+        }
+
+        p, button{
+            text-align: center;
+            font-size: 36pt;
+            font-weight: bold;
+        }
+
+        .leaderboard-heading {
+            text-decoration: underline;
+            margin-bottom: -10px;
+        }
+    </style>
 </head>
 <body>
-    <div id="app"></div>
+    <div id="app-frame">
+        <div id="app"></div>
+    </div>
     <script>
         const event_handlers = {
             events: [],
@@ -47,27 +72,11 @@
             }
         }
 
-        const requests_module = {
-            request: (method, url, data = null, headers = null) => {
-                let request = new XMLHttpRequest();
-                request.open(method, url, false)
-                if(headers !== null){
-                    for (const [key, value] of Object.entries(headers)) {
-                        request.setRequestHeader(key, value)
-                    }
-                }
-                request.send(body)
-                while(request.readyState !== 4) {}
-                return {status_code: request.status, text: request.responseText}
-            }
-        }
-
         async function main(){
             let pyodide = await loadPyodide();
             // Load packages
             await pyodide.loadPackage("pyyaml")
             await pyodide.loadPackage("requests")
-            //pyodide.registerJsModule("requests", requests_module)
             pyodide.registerJsModule("web", renderer_module)
             // Load the source code
             let resp = await fetch(window.location.protocol + "//" + window.location.host + "/source.zip")

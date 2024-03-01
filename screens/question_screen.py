@@ -13,10 +13,10 @@ class QuestionScreen(Screen):
                                   self.question.question)
         # #### Answer buttons
         self.answer_buttons = [
-            renderer.button(Rect("0px", "225px", "100%", "50px"), self.question.options[0], "answer_1"),
-            renderer.button(Rect("0px", "300px", "100%", "50px"), self.question.options[1], "answer_2"),
-            renderer.button(Rect("0px", "375px", "100%", "50px"), self.question.options[2], "answer_3"),
-            renderer.button(Rect("0px", "450px", "100%", "50px"), self.question.options[3], "answer_4")
+            renderer.button(Rect("0px", "225px", "100%", "150px"), self.question.options[0], "answer_1"),
+            renderer.button(Rect("0px", "400px", "100%", "150px"), self.question.options[1], "answer_2"),
+            renderer.button(Rect("0px", "550px", "100%", "150px"), self.question.options[2], "answer_3"),
+            renderer.button(Rect("0px", "725px", "100%", "150px"), self.question.options[3], "answer_4")
         ]
 
     def process_screen_events(self, event):

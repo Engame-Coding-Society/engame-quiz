@@ -77,18 +77,20 @@ def nav_to_question_screen():
     screen_instance = init_screen()
 
 
-def nav_to_results(result):
+def nav_to_results(player_name):
     global current_screen
     global player_result
     global screen_instance
 
     current_screen = Screens.LEADERBOARD_PLACEMENT
-
-    response = leaderboard.save_player(result, scores.get_score())
-    if not response["success"]:
-        print("Couldn't save the player score")
+    if player_name != "":
+        response = leaderboard.save_player(player_name, scores.get_score())
+        if not response["success"]:
+            print("Couldn't save the player score")
+        else:
+            player_result = response["data"]
     else:
-        player_result = response["data"]
+        player_result["score"] = scores.get_score()
     screen_instance = init_screen()
     
 

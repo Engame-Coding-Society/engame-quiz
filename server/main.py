@@ -1,7 +1,7 @@
 import json
 from firebase_functions import firestore_fn, https_fn, options
 from firebase_admin import firestore, credentials, initialize_app
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Response
 import os, sys
 
 prefix = "server/" if not str(os.getcwd()).endswith('server') else ""
@@ -31,6 +31,11 @@ def get_player_score(name: str):
         return None
     else:
         return {"name": name, "score": player_ref.to_dict()["score"]}
+
+
+CORS_HEADERS = [("Access-Control-Allow-Methods", "POST, GET, OPTIONS"),
+                ("Access-Control-Allow-Headers", "Content-Type, Origin, Content-Length"),
+                ("Access-Control-Allow-Origin", "*")]
 
 
 @app.route("/scores", methods=["GET"])
@@ -90,4 +95,10 @@ def get_top_id(top: int):
 @https_fn.on_request()
 def handle_https_request(req: https_fn.Request) -> https_fn.Response:
     with app.request_context(req.environ):
-        return app.full_dispatch_request()
+        dispatched_request = app.full_dispatch_request()
+        full_headers = []
+        for header, value in dispatched_request.headers.items():
+            full_headers.append((header, value))
+        for header in CORS_HEADERS:
+            full_headers.append(header)
+        return Response(dispatched_request.response, dispatched_request.status, full_headers)

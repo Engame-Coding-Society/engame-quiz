@@ -1,5 +1,6 @@
 import random
 
+
 def randomize_array(array):
     """
     Randomize the order of elements in the given array.

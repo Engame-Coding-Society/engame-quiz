@@ -1,35 +1,19 @@
 from screens.screen import Screen
-import pygame_gui
-import pygame
-from main import nav_to_question_screen
+from screens.backends import EventType, Rect
+
 
 class WelcomeScreen(Screen):
-    def __init__(self, screen_size, clock, loader, set_callback):
-        super().__init__(screen_size, clock, loader)
-        self.loader = loader
+    def __init__(self, set_callback):
+        super().__init__()
         self.set_callback = set_callback
-        self.init_ui()
 
-
-    def init_ui(self):
+    def init_ui(self, renderer):
         # Title label
-        self.title_label = pygame_gui.elements.UILabel(
-            pygame.Rect((0, 0), (800, 100)), "Engame Quiz", self.ui
-        )
-
+        self.title_label = renderer.text(Rect("0px", "100px", "100%", "75px"), "Engame Quiz")
         # Start quiz button
-        self.start_quiz_button = pygame_gui.elements.UIButton(
-            pygame.Rect((0, 100), (800, 100)), "Start Quiz", self.ui
-        )
-
-    def start_quiz(self):
-        self.set_callback(self.clock, self.loader)
+        self.start_quiz_button = renderer.button(Rect("0px", "450px", "100%", "150px"), "Start Quiz", "start_btn")
 
     def process_screen_events(self, event):
-        if event.type == pygame_gui.UI_BUTTON_PRESSED:
-            if event.ui_element == self.start_quiz_button:
-                self.start_quiz()
-        self.ui.process_events(event)
-
-    def draw_screen(self, surface):
-        self.ui.draw_ui(surface)
+        if event.type == EventType.BUTTON_PRESSED:
+            if event.component == self.start_quiz_button:
+                self.set_callback()

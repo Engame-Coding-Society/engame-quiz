@@ -10,5 +10,28 @@
         "firebase-debug.*.log"
       ]
     }
-  ]
+  ],
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/api/**",
+        "function": {
+          "functionId": "handle_https_request"
+        }
+      }
+    ],
+    "headers": [{
+      "source": "**/*",
+      "headers": [ {
+        "key": "Access-Control-Allow-Origin",
+        "value": "*"
+      }]
+    }]
+  }
 }

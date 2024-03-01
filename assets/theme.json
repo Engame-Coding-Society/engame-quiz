@@ -1,7 +1,14 @@
 {
     "defaults": {
         "colours":{
-            "normal_text": "#000000"
+            "normal_text": "#000000",
+            "normal_bg": "#000000"
+        }
+    },
+    "text_entry_line": {
+        "colours": {
+            "dark_bg": "#00000000",
+            "text_cursor": "#000000"
         }
     },
     "#the_title": {

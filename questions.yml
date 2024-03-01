@@ -1,0 +1,19 @@
+questions:
+  - question: "Which society created this game?"
+    answers: ["The Coding Society", "Forward Thinkers Hub", "The Movie Society", "Legal"]
+  - question: "When was Engame found?"
+    answers: ["2010", "2005", "1990", "2013"]
+  - question: "What is the Freshmore year?"
+    answers: ["A mix year of Freshman and Sophomore", "A year between Freshman and Sophomore", "A course for Freshman and Sophomore", "A society only for Freshman"]
+  - question: "How many societies work inside Engame?"
+    answers: ["13", "9", "5", "7"]
+  - question: "Which one is the oldest society?"
+    answers: ["Debate Society", "Sport Society", "Gavel Club", "EnGame Society"]
+  - question: "Which one is not a skill course at Engame?"
+    answers: ["Profile Creation", "Sex and Love", "Time Management", "Writing as a Researcher"]
+  - question: "Who is the CEO of Engame?"
+    answers: ["Balázs Lévai", "Balázs Németh", "Anna Iglódi", "Virág Keresztes"]
+  - question: "How many signatures did it take to bring back the Tea Corner?"
+    answers: ["80", "144", "42", "15"]
+  - question: "Starting Engame along with your school year,\n which is the first event you can attend?"
+    answers: ["Opening Ceremony", "Engame Summer Camp", "Society Fair", "Introduction Week"]

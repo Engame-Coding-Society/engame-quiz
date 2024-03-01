@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Engame Quiz</title>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        #app-frame {
+            display: flex;
+        }
+
+        #loader {
+            display: block;
+        }
+
+        #app {
+            justify-self: center;
+            display: block;
+            max-width: 500px;
+            max-height: 600px;
+        }
+
+
+        p, button {
+            text-align: center;
+            font-size: 36pt;
+            font-weight: bold;
+        }
+
+        .leaderboard-header {
+            text-decoration: underline;
+            margin-bottom: -10px;
+        }
+    </style>
+</head>
+<body>
+<div id="app-frame">
+    <div id="loader">
+        <p id="info-text"></p>
+        <progress id="progress" max="100"></progress>
+    </div>
+
+    <div id="app"></div>
+</div>
+<script>
+    const event_handlers = {
+        events: [],
+        add_event: (type, id, args = null) => {
+            let event = {"type": type, "id": id}
+            event_handlers.events.push((args === null) ? event : {...event, ...args})
+        }
+    }
+
+    const renderer_module = {
+        setup_event_callback: component => {
+            if (component.id === null) return
+            let element = $(`#${component.id}`)
+            switch (component.type) {
+                case "button":
+                    element.on('click', () => event_handlers.add_event("button_pressed", component.id))
+                    break;
+                case "entry":
+                    element.on('change', () => event_handlers.add_event("entry_changed", component.id,
+                        {value: element.val()}))
+                    break;
+                default:
+                    break;
+            }
+        },
+        render: (components) => {
+            $("#app").html("")
+            JSON.parse(components).forEach((component, _, __) => {
+                $("#app").append($(component.content))
+                renderer_module.setup_event_callback(component)
+            })
+        },
+        get_events: () => {
+            let events = event_handlers.events
+            event_handlers.events = []
+            return events
+        }
+    }
+
+    function update_progress(info, percent) {
+        $("#info-text").text(info)
+        $("#progress").val(percent)
+    }
+
+    function timeout(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function main() {
+        update_progress("Initializing...", 0)
+        let pyodide = await loadPyodide();
+        update_progress("Loaded Pyodide", 20)
+        // Load packages
+        update_progress("Loading Pyyaml...", 30)
+        await pyodide.loadPackage("pyyaml")
+        update_progress("Loaded Pyyaml.", 35)
+        timeout(100)
+        update_progress("Loading requests...", 50)
+        await pyodide.loadPackage("requests")
+        update_progress("Loaded requests", 60)
+        pyodide.registerJsModule("web", renderer_module)
+        // Load the source code
+        update_progress("Loading the game...", 75)
+        let resp = await fetch(window.location.protocol + "//" + window.location.host + "/source.zip")
+        let buffer = await resp.arrayBuffer()
+        update_progress("Unpacking the game...", 90)
+        await pyodide.unpackArchive(buffer, "zip")
+        update_progress("Starting....", 95)
+        pyodide.pyimport("main")
+        $("#loader").hide()
+        await pyodide.runPythonAsync(`
+                import main
+                main.main()
+            `)
+    }
+
+    main();
+</script>
+</body>
+</html>

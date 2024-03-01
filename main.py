@@ -52,7 +52,7 @@ def construct_screen():
             raise NotImplementedError("You haven't implemented your screen yet!")
 
 
-def nav_to_answer_screen(q: Question, a: int):
+def nav_to_answer_screen(q: Question, a: str):
     global current_screen
     global scores
     global screen_instance

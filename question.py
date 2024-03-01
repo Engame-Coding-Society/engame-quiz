@@ -20,12 +20,12 @@ class Question:
         self.options = options
         self.correctIdx = correct_idx
 
-    def is_correct(self, answer_idx):
+    def is_correct(self, answer):
         """
         Check if the given answer index is correct.
-        :param answer_idx: The index of the answer chosen by the player.
+        :param answer: The answer chosen by the player.
         """
-        return answer_idx == self.correctIdx
+        return self.options[self.correctIdx] == answer
 
     @staticmethod
     def load(path: str) -> list:
